@@ -52,18 +52,16 @@ function getLatLongFromAddress() {
         MapView,
         WebMap
       ) {
-        var top = result.candidates[0];
+        var topHit = result.candidates[0];
         MainMapView.goTo([
-          Number(result.candidates[0].location.x),
-          Number(result.candidates[0].location.y),
-        ]);
-        // MainMapView.goTo({
-        //   target: new Extent(694942, 5596444, 1284090, 6163926, SpatialReference.WebMercator),
-        //   // target: new Extent(694942, 5596444, 1284090, 6163926, SpatialReference.WebMercator),
-        //   heading: -20
-        // }, {
-        //   animate: false
-        // });
+          Number(topHit.location.x),
+          Number(topHit.location.y),
+        ]).then(
+          // TODO: Create a point graphic (aka "marker) to show the geocode result.
+          function() {
+            console.log('then!');
+          }
+        );
       });
     },
   });
@@ -103,7 +101,15 @@ function getAddressFromBrowserLocationSucess(position) {
     },
     success: function(result) {
       $('#AddressInput').val(result.address.Match_addr);
-      MainMapView.goTo([Number(result.location.x), Number(result.location.y)]);
+      MainMapView.goTo([
+        Number(result.location.x),
+        Number(result.location.y),
+      ]).then(
+        // TODO: Create a point graphic (aka "marker) to show the geocode result.
+        function() {
+          console.log('then!');
+        }
+      );
     },
   });
 }
