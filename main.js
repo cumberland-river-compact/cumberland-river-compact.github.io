@@ -1,3 +1,5 @@
+var MainMapView = null;
+
 require(['esri/views/MapView', 'esri/WebMap', 'dojo/domReady!'], function(
   MapView,
   WebMap
@@ -20,44 +22,41 @@ require(['esri/views/MapView', 'esri/WebMap', 'dojo/domReady!'], function(
   /************************************************************
    * Set the WebMap instance to the map property in a MapView.
    ************************************************************/
-  var view = new MapView({
+  MainMapView = new MapView({
     map: webmap,
     container: 'viewDiv',
+    center: [-86, 37],
+    zoom: 12,
   });
-
-  function getLatLongFromAddress() {
-    addressData = {
-      singleLine: $('#AddressInput').val(),
-      outFields: 'Match_addr,Addr_type',
-    };
-    jQuery.ajax({
-      url:
-        'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json',
-      type: 'POST',
-      data: addressData,
-      dataType: 'json',
-      beforeSend: function(x) {
-        if (x && x.overrideMimeType) {
-          x.overrideMimeType('application/j-son;charset=UTF-8');
-        }
-      },
-      success: function(result) {
-        var addressLatLongs = document.getElementById('retrivedCoOrdinates');
-        $('#retrivedCoOrdinatesAddress').html(result.candidates[0].address);
-        $('#retrivedCoOrdinatesLat').html(result.candidates[0].location.x);
-        $('#retrivedCoOrdinatesLon').html(result.candidates[0].location.y);
-        document.getElementById('viewDiv').innerHTML = '';
-        require([
-          'esri/views/MapView',
-          'esri/WebMap',
-          'dojo/domReady!',
-        ], function(MapView, WebMap) {
-          view.center = [
-            Number(result.candidates[0].location.x),
-            Number(result.candidates[0].location.y),
-          ];
-        });
-      },
-    });
-  }
 });
+
+function getLatLongFromAddress() {
+  addressData = {
+    singleLine: $('#AddressInput').val(),
+    outFields: 'Match_addr,Addr_type',
+  };
+  jQuery.ajax({
+    url:
+      'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json',
+    type: 'POST',
+    data: addressData,
+    dataType: 'json',
+    beforeSend: function(x) {
+      if (x && x.overrideMimeType) {
+        x.overrideMimeType('application/j-son;charset=UTF-8');
+      }
+    },
+    success: function(result) {
+      var addressLatLongs = document.getElementById('retrivedCoOrdinates');
+      require(['esri/views/MapView', 'esri/WebMap', 'dojo/domReady!'], function(
+        MapView,
+        WebMap
+      ) {
+        MainMapView.center = [
+          Number(result.candidates[0].location.x),
+          Number(result.candidates[0].location.y),
+        ];
+      });
+    },
+  });
+}
