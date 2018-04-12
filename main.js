@@ -26,7 +26,7 @@ require(['esri/views/MapView', 'esri/WebMap', 'dojo/domReady!'], function(
     map: webmap,
     container: 'map',
     center: [-86, 37],
-    zoom: 12,
+    zoom: 13,
   });
 });
 
@@ -52,11 +52,58 @@ function getLatLongFromAddress() {
         MapView,
         WebMap
       ) {
-        MainMapView.center = [
+        var top = result.candidates[0];
+        MainMapView.goTo([
           Number(result.candidates[0].location.x),
           Number(result.candidates[0].location.y),
-        ];
+        ]);
+        // MainMapView.goTo({
+        //   target: new Extent(694942, 5596444, 1284090, 6163926, SpatialReference.WebMercator),
+        //   // target: new Extent(694942, 5596444, 1284090, 6163926, SpatialReference.WebMercator),
+        //   heading: -20
+        // }, {
+        //   animate: false
+        // });
       });
+    },
+  });
+}
+
+function getAddressFromBrowserLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      getAddressFromBrowserLocationSucess,
+      onFail,
+      { enableHighAccuracy: true, timeout: 20000 }
+    );
+  } else {
+    x.innerHTML = 'Geolocation is not supported by this browser.';
+  }
+}
+
+function onFail() {
+  console.log('Error: unable to get geolocation');
+}
+
+function getAddressFromBrowserLocationSucess(position) {
+  addressData = {
+    location: position.coords.longitude + ',' + position.coords.latitude,
+    outFields: 'Match_addr,Addr_type',
+  };
+  jQuery.ajax({
+    url:
+      'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json',
+    type: 'POST',
+    data: addressData,
+    dataType: 'json',
+    beforeSend: function(x) {
+      if (x && x.overrideMimeType) {
+        x.overrideMimeType('application/j-son;charset=UTF-8');
+      }
+    },
+    success: function(result) {
+      $('#AddressInput').val(result.address.Match_addr);
+      MainMapView.goTo([Number(result.location.x), Number(result.location.y)]);
     },
   });
 }
