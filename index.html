@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://js.arcgis.com/4.6/esri/css/main.css">
-    <link href="https://fonts.googleapis.com/css?family=Lalezar" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=EB+Garamond" rel="stylesheet">
     <link rel="stylesheet" href="main.css">
 
     <title>Welcome to iCreek</title>
@@ -16,74 +16,74 @@
   <body>
     
     <!-- Heading section -->
-    <img src="assets/banner.png" class="img-fluid" alt="Responsive image">
-
-
-    <div>
-      <h1 class="text-center text-info main-heading">How Healthy is your water?</h1>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroup-sizing-default">Your Address</span>
-        </div>
-        <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-        <div class="input-group-append">
-          <button class="btn btn-primary bg-info border-info" type="button">
-              Search
-          </button>
-        </div>
-      </div>
-
-      
-      <button class="btn btn-primary bg-info border-info" type="button">
-        Use my current location
-      </button>
-    </div>
+    <img src="assets/banner.png" class="img-fluid" alt="Responsive image" id="heading-img">
     
     <div class="container">
-        <div class="row">
-          <div class="col-sm">
-            <div class="card-body">
-              <div class="waterway-heading">
-                <h6 class="text-muted">Waterway nearest this address</h6>
-                <h3 class="card-title">Browns Creek</h3>
+      <div class="row">
+        <div class="col-sm">
+            <h1 class="display-1 text-center text-info">How Healthy is your water?</h1>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">Your Address</span>
               </div>
-              
-              <div class="waterway-health text-danger">
-                <p class="font-weight-bold">Status: <span id="waterway-status">Unhealthy</span></p>
+              <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+              <div class="input-group-append">
+                <button class="btn btn-primary bg-info border-info" type="button">
+                    Search
+                </button>
               </div>
-
-              <div class="waterway-problems">
-                <p>Select a problem to see how you can help this stream:</p>
-                <ul id="waterway-problems-list">
-                  <li><a href="#">Pathogens</a></li>
-                  <li><a href="#">Nutrients</a></li>
-                  <li><a href="#"></a></li>
-                </ul>
-
-              </div>
-
-              <div class="waterway-adopt">
-                <h6>Adopt a Waterway</h6>
-                <p>
-                  Are you a member of a group or organization in your community that would be interested in adopting this waterway? 
-                  <a href="#">Learn more</a>
-                </p>
-
-              </div>
-
-              <div class="waterway-nearby">
-                <h6>Neighboring Waterways</h6>
-                <p>Check the health of these waterways near this address:</p>
-                <ul id="neighbor-waterways-list"></ul>
-              </div>
-              
             </div>
-          </div>
-          <div class="col-sm">
-              <div id="viewDiv"></div>
-          </div>
+      
+            
+            <button class="btn btn-primary bg-info border-info" type="button">
+              Use my current location
+            </button>
         </div>
       </div>
+      <div class="row">
+        <div class="col-sm">
+          <div class="card-body">
+            <div class="waterway-heading">
+              <h6 class="text-muted">Waterway nearest this address</h6>
+              <h3 class="card-title">Browns Creek</h3>
+            </div>
+            
+            <div class="waterway-health text-danger">
+              <p class="font-weight-bold">Status: <span id="waterway-status">Unhealthy</span></p>
+            </div>
+
+            <div class="waterway-problems">
+              <p>Select a problem to see how you can help this stream:</p>
+              <ul id="waterway-problems-list">
+                <li><a href="#">Pathogens</a></li>
+                <li><a href="#">Nutrients</a></li>
+                <li><a href="#"></a></li>
+              </ul>
+
+            </div>
+
+            <div class="waterway-adopt">
+              <h6 class="font-weight-bold">Adopt a Waterway</h6>
+              <p>
+                Are you a member of a group or organization in your community that would be interested in adopting this waterway? 
+                <a href="#">Learn more</a>
+              </p>
+
+            </div>
+
+            <div class="waterway-nearby">
+              <h6 class="font-weight-bold">Neighboring Waterways</h6>
+              <p>Check the health of these waterways near this address:</p>
+              <ul id="neighbor-waterways-list"></ul>
+            </div>
+            
+          </div>
+        </div>
+        <div class="col-sm">
+            <div id="viewDiv"></div>
+        </div>
+      </div>
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
