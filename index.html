@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://js.arcgis.com/4.6/esri/css/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Lalezar" rel="stylesheet">
     <link rel="stylesheet" href="main.css">
 
     <title>Welcome to iCreek</title>
@@ -15,15 +16,11 @@
   <body>
     
     <!-- Heading section -->
-    <div class="jumbotron jumbotron-fluid">
-      <div class="container">
-        <h1 class="display-4">iCreek</h1>
-        <p class="lead">Placeholder text for descritpion about iCreek application</p>
-      </div>
-    </div>
+    <img src="assets/banner.png" class="img-fluid" alt="Responsive image">
 
 
-    <p>
+    <div>
+      <h1 class="text-center text-info main-heading">How Healthy is your water?</h1>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text" id="inputGroup-sizing-default">Your Address</span>
@@ -31,7 +28,7 @@
         <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
         <div class="input-group-append">
           <button class="btn btn-primary bg-info border-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-              Go
+              Search
           </button>
         </div>
       </div>
@@ -40,13 +37,14 @@
       <button class="btn btn-primary bg-info border-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
         Use my current location
       </button>
-    </p>
+    </div>
+    
     <div class="collapse" id="collapseExample">
       <div class="container">
           <div class="row">
             <div class="col-sm">
               <div class="card-body text-info">
-                <h5 class="card-title">Info card title</h5>
+                <h5 class="card-title">Browns Creek</h5>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
               </div>
             </div>
