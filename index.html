@@ -13,7 +13,7 @@
     <title>Welcome to iCreek</title>
   </head>
   <body>
-    
+
     <!-- Heading section -->
     <div class="jumbotron jumbotron-fluid">
       <div class="container">
@@ -30,13 +30,18 @@
         </div>
         <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
         <div class="input-group-append">
-          <button class="btn btn-primary bg-info border-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-              Go
+          <button class="btn btn-primary bg-info border-info"
+            onclick="getLatLongFromAddress();"
+            type="button" data-toggle="collapse"
+            data-target="#collapseExample"
+            aria-expanded="false"
+            aria-controls="collapseExample">
+            Go
           </button>
         </div>
       </div>
 
-      
+
       <button class="btn btn-primary bg-info border-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
         Use my current location
       </button>
