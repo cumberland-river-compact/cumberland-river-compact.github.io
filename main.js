@@ -15,7 +15,7 @@ require(['esri/views/MapView', 'esri/WebMap', 'dojo/domReady!'], function(
   var webmap = new WebMap({
     portalItem: {
       // autocasts as new PortalItem()
-      id: 'c13022a5c4754b958d3af300b2f0afc3',
+      id: '505bc0a0a0cf450e9b40658672ce16be',
     },
   });
 
