@@ -10,3 +10,7 @@
   font-family: 'Lalezar', cursive;
   font-size: 4em;
 }
+
+ul {
+  list-style: none;
+}

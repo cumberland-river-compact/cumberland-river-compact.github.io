@@ -27,33 +27,63 @@
         </div>
         <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
         <div class="input-group-append">
-          <button class="btn btn-primary bg-info border-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+          <button class="btn btn-primary bg-info border-info" type="button">
               Search
           </button>
         </div>
       </div>
 
       
-      <button class="btn btn-primary bg-info border-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+      <button class="btn btn-primary bg-info border-info" type="button">
         Use my current location
       </button>
     </div>
     
-    <div class="collapse" id="collapseExample">
-      <div class="container">
-          <div class="row">
-            <div class="col-sm">
-              <div class="card-body text-info">
-                <h5 class="card-title">Browns Creek</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <div class="container">
+        <div class="row">
+          <div class="col-sm">
+            <div class="card-body">
+              <div class="waterway-heading">
+                <h6 class="text-muted">Waterway nearest this address</h6>
+                <h3 class="card-title">Browns Creek</h3>
               </div>
-            </div>
-            <div class="col-sm">
-                <div id="viewDiv"></div>
+              
+              <div class="waterway-health text-danger">
+                <p class="font-weight-bold">Status: <span id="waterway-status">Unhealthy</span></p>
+              </div>
+
+              <div class="waterway-problems">
+                <p>Select a problem to see how you can help this stream:</p>
+                <ul id="waterway-problems-list">
+                  <li><a href="#">Pathogens</a></li>
+                  <li><a href="#">Nutrients</a></li>
+                  <li><a href="#"></a></li>
+                </ul>
+
+              </div>
+
+              <div class="waterway-adopt">
+                <h6>Adopt a Waterway</h6>
+                <p>
+                  Are you a member of a group or organization in your community that would be interested in adopting this waterway? 
+                  <a href="#">Learn more</a>
+                </p>
+
+              </div>
+
+              <div class="waterway-nearby">
+                <h6>Neighboring Waterways</h6>
+                <p>Check the health of these waterways near this address:</p>
+                <ul id="neighbor-waterways-list"></ul>
+              </div>
+              
             </div>
           </div>
+          <div class="col-sm">
+              <div id="viewDiv"></div>
+          </div>
         </div>
-    </div>
+      </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
