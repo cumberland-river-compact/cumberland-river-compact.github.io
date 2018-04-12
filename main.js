@@ -1,9 +1,12 @@
 var MainMapView = null;
 
-require(['esri/views/MapView', 'esri/WebMap', 'dojo/domReady!'], function(
-  MapView,
-  WebMap
-) {
+require([
+  'esri/views/MapView',
+  'esri/WebMap',
+  // 'esri/tasks/IdentifyTask', // TODO: remove?
+  // 'esri/tasks/support/IdentifyParameters', // TODO: remove?
+  'dojo/domReady!',
+], function(MapView, /* IdentifyTask, IdentifyParameters, */ WebMap) {
   /************************************************************
    * Creates a new WebMap instance. A WebMap must reference
    * a PortalItem ID that represents a WebMap saved to
@@ -25,8 +28,15 @@ require(['esri/views/MapView', 'esri/WebMap', 'dojo/domReady!'], function(
   MainMapView = new MapView({
     map: webmap,
     container: 'map',
-    center: [-86, 37],
-    zoom: 13,
+    center: [-86.75, 36.16],
+    zoom: 12,
+  }).when(function() {
+    console.log('when!');
+    // Layers are indexed by position
+    // var myLayer = MainMapView.layers.getItemAt(1);
+    // MainMapView.whenLayerView(myLayer).then(function(lyrView) {
+    //   console.log('layer found!');
+    // });
   });
 });
 
