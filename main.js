@@ -17,7 +17,7 @@ require([
    ************************************************************/
   var webmap = new WebMap({
     portalItem: {
-      // autocasts as new PortalItem()
+      // id: 'c13022a5c4754b958d3af300b2f0afc3',
       id: '505bc0a0a0cf450e9b40658672ce16be',
     },
   });
@@ -30,7 +30,9 @@ require([
     container: 'map',
     center: [-86.75, 36.16],
     zoom: 12,
-  }).when(function() {
+  });
+
+  MainMapView.when(function() {
     console.log('when!');
     // Layers are indexed by position
     // var myLayer = MainMapView.layers.getItemAt(1);
