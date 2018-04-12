@@ -37,7 +37,7 @@ function getLatLongFromAddress() {
   };
   jQuery.ajax({
     url:
-      'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json',
+      'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json',
     type: 'POST',
     data: addressData,
     dataType: 'json',

@@ -24,9 +24,9 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroup-sizing-default">Your Address</span>
               </div>
-              <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onclick="getLatLongFromAddress();">
+              <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="AddressInput" required>
               <div class="input-group-append">
-                <button class="btn btn-primary bg-info border-info" type="button">
+                <button class="btn btn-primary bg-info border-info" type="button" onclick="getLatLongFromAddress();">
                     Search
                 </button>
               </div>
