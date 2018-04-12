@@ -1,4 +1,5 @@
 var MainMapView = null;
+$('[data-toggle="tooltip"]').tooltip()
 $( "#map" ).hide();
 
 require(['esri/views/MapView', 'esri/WebMap', 'dojo/domReady!'], function(
@@ -123,7 +124,7 @@ function showWaterwayInfoAndMap(){
   const waterwayInfoDomRef = document.getElementById("waterway-info");
   let waterwayInformationHtmlTemplate = `<div class="card-body">
   <div class="waterway-heading">
-    <h5 class="text-muted">Waterway nearest this address</h5>
+    <h5 class="text-muted">Waterway Nearest This Address</h5>
     <h3 class="card-title">Browns Creek</h3>
   </div>
 
@@ -145,15 +146,18 @@ function showWaterwayInfoAndMap(){
     <h6 class="font-weight-bold">Adopt a Waterway</h6>
     <p>
       Are you a member of a group or organization in your community that would be interested in adopting this waterway?
-      <a href="#">Learn more</a>
+      <a href="#">Learn more...</a>
     </p>
 
   </div>
 
   <div class="waterway-nearby">
-    <h6 class="font-weight-bold">Neighboring Waterways</h6>
+    <h6 class="font-weight-bold">Adjacent Waterways</h6>
     <p>Check the health of these waterways near this address:</p>
-    <ul id="neighbor-waterways-list"></ul>
+    <ul id="neighbor-waterways-list">
+      <li><a href="#">Check Upstream Water Health</a></li>
+      <li><a href="#">Check Downstream Water Health</a></li>
+    </ul>
   </div>
 
   </div>`;

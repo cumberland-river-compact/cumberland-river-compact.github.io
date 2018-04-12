@@ -21,19 +21,19 @@
     <div class="container">
       <div class="row">
         <div class="col-md">
-            <h1 class="display-3 text-center text-info main-heading">How Healthy is your water?</h1>
+            <h1 class="display-3 text-center text-info main-heading">How Healthy is Your Water?</h1>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroup-sizing-default">Address</span>
               </div>
               <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="AddressInput" required>
               <div class="input-group-append">
-                <button class="btn btn-primary bg-info border-info" type="button" onclick="getLatLongFromAddress();">
+                <button class="btn btn-primary bg-info border-info" type="button" data-toggle="tooltip" data-placement="bottom" title="Search" onclick="getLatLongFromAddress();">
                   <span><i class="fas fa-search"></i></span>
                 </button>
 
               </div>
-                <button class="btn btn-primary bg-info border-info" id="current-location-btn" type="button" onclick="getAddressFromBrowserLocation();">
+                <button class="btn btn-primary bg-info border-info" id="current-location-btn" type="button" data-toggle="tooltip" data-placement="bottom" title="Use current location" onclick="getAddressFromBrowserLocation();">
                   <span><i class="fas fa-location-arrow"></i></span>
                 </button>
             </div>
