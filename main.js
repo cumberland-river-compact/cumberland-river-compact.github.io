@@ -24,7 +24,7 @@ require(['esri/views/MapView', 'esri/WebMap', 'dojo/domReady!'], function(
    ************************************************************/
   MainMapView = new MapView({
     map: webmap,
-    container: 'viewDiv',
+    container: 'map',
     center: [-86, 37],
     zoom: 12,
   });
