@@ -1,3 +1,5 @@
+let crcBaseUrl = "http://cumberlandriverbasin.org/"
+
 require([
   // ArcGIS
   'esri/Map',
@@ -159,6 +161,7 @@ require([
         .then(showPopup)
         .then(function() {
           console.log('then!');
+          showWaterwayInfoAndMap()
         });
 
       // Shows the results of the Identify in a popup once the promise is resolved
@@ -359,49 +362,54 @@ require([
 //  });
 //}
 
-//function showWaterwayInfoAndMap() {
-//  const waterwayInfoDomRef = document.getElementById('waterway-info');
-//  let waterwayInformationHtmlTemplate = `<div class="card-body">
-//  <div class="waterway-heading">
-//    <h5 class="text-muted">Waterway Nearest This Address</h5>
-//    <h3 class="card-title">Browns Creek</h3>
-//  </div>
+function showWaterwayInfoAndMap() {
+ const waterwayInfoDomRef = document.getElementById('waterway-info');
 
-//  <div class="waterway-health text-danger">
-//    <p class="font-weight-bold">Status: <span id="waterway-status">Unhealthy</span></p>
-//  </div>
+ let waterwayName = "Browns Creek"
+ let waterwayStatus = "Unhealthy"
+ let problemListHTML = createProblemsLinks(["Altered Streamside Vegetation", "Aluminum"])
+  
+ let waterwayInformationHtmlTemplate = `<div class="card-body">
+ <div class="waterway-heading">
+   <h5 class="text-muted">Waterway Nearest This Address</h5>
+   <h3 class="card-title">${waterwayName}</h3>
+ </div>
 
-//  <div class="waterway-problems">
-//    <p>Select a problem to see how you can help this stream:</p>
-//    <ul id="waterway-problems-list">
-//      <li><a href="#">Pathogens</a></li>
-//      <li><a href="#">Nutrients</a></li>
-//      <li><a href="#"></a></li>
-//    </ul>
+ <div class="waterway-health text-danger">
+   <p class="font-weight-bold">Status: <span id="waterway-status">${waterwayStatus}</span></p>
+ </div>
 
-//  </div>
+ <div class="waterway-problems">
+   <p>Select a problem to see how you can help this stream:</p>
+   <ul id="waterway-problems-list">
+     ${problemListHTML}
+   </ul>
 
-//  <div class="waterway-adopt">
-//    <h6 class="font-weight-bold">Adopt a Waterway</h6>
-//    <p>
-//      Are you a member of a group or organization in your community that would be interested in adopting this waterway?
-//      <a href="#">Learn more...</a>
-//    </p>
+ </div>
 
-//  </div>
+ <div class="waterway-adopt">
+   <h6 class="font-weight-bold">Adopt a Waterway</h6>
+   <p>
+     Are you a member of an organization that would be interested in adopting this waterway? Contact us at <a href="tel:6158371151">615-837-1151</a>
+   </p>
 
-//  <div class="waterway-nearby">
-//    <h6 class="font-weight-bold">Adjacent Waterways</h6>
-//    <p>Check the health of these waterways near this address:</p>
-//    <ul id="neighbor-waterways-list">
-//      <li><a href="#">Check Upstream Water Health</a></li>
-//      <li><a href="#">Check Downstream Water Health</a></li>
-//    </ul>
-//  </div>
+ </div>
 
-//  </div>`;
+ <div class="full-map">
+ <a href="#">View water quality map for entire basin</a>
+ </div>
 
-//  console.log(waterwayInfoDomRef);
-//  waterwayInfoDomRef.innerHTML = waterwayInformationHtmlTemplate;
-//  $('#map').show();
-//}
+ </div>`;
+
+ waterwayInfoDomRef.innerHTML = waterwayInformationHtmlTemplate;
+}
+
+
+function createProblemsLinks(problemList) {  
+  let listOfLinks = ""
+  problemList.forEach(element => {
+    let urlExtension = element.toLowerCase().split(" ").join("-")    
+    listOfLinks += `<li><a href="${crcBaseUrl}${urlExtension}">${element}</a></li>`
+  });
+  return listOfLinks
+}
