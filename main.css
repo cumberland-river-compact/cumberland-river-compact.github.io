@@ -56,3 +56,23 @@ ul {
 .esri-popup .esri-popup-body .esri-popup-content {
   font-size: 14px;
 }
+
+#outputMessages {
+  position: absolute;
+  z-index: 70;
+  top: 0px;
+  bottom: 0;
+  box-sizing: border-box;
+  padding-top: 50px;
+  height: 100%;
+  width: 30%;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 14px;
+  line-height: 30px;
+  overflow: auto
+ }
+
+#icreek-logo {
+  width: 15%;
+}
