@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+   crossorigin="anonymous">
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css?family=EB+Garamond" rel="stylesheet">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
@@ -27,56 +27,26 @@
 <body class="calcite-maps calcite-nav-top">
   <!-- Navbar -->
 
-  <nav class="navbar calcite-navbar navbar-fixed-top calcite-text-light calcite-bg-dark">
-    <!-- Menu -->
-    <div class="dropdown calcite-dropdown calcite-text-dark calcite-bg-light" role="presentation">
-      <a class="dropdown-toggle" role="menubutton" aria-haspopup="true" aria-expanded="false" tabindex="0">
-        <div class="calcite-dropdown-toggle">
-          <span class="sr-only">Toggle dropdown menu</span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </a>
-      <ul class="dropdown-menu" role="menu">
-        <li>
-          <a role="menuitem" tabindex="0" data-target="#panelInfo" aria-haspopup="true">
-            <span class="glyphicon glyphicon-info-sign"></span> About</a>
-        </li>
-        <li>
-          <a role="menuitem" tabindex="0" href="#" data-target="#panelLegend" aria-haspopup="true">
-            <span class="glyphicon glyphicon-list-alt"></span> Legend</a>
-        </li>
-        <li>
-          <a role="menuitem" tabindex="0" href="#" id="calciteToggleNavbar" aria-haspopup="true">
-            <span class="glyphicon glyphicon-fullscreen"></span> Full Map</a>
-        </li>
-      </ul>
-    </div>
-    <!-- Title -->
-    <div class="calcite-title calcite-overflow-hidden">
-        <img src="assets/icreek_logo.png" class="img-fluid" id= "icreek-logo" alt="Responsive image">
-      <span class="calcite-title-divider hidden-xs"></span>
-      <span class="calcite-title-sub hidden-xs">How Healthy is Your Waterway?</span>
-    </div>
-    <!-- Nav -->
-    <ul class="nav navbar-nav calcite-nav">
-      <li>
-        <!-- <div class="calcite-navbar-search calcite-search-expander"> -->
-        <div id="searchWidgetDiv"></div>
-        <!-- </div> -->
-      </li>
-    </ul>
-  </nav>
+  <nav class="navbar navbar-fixed-top calcite-navbar calcite-bg-custom calcite-text-light" style="background-color: rgb(0,0,0,0.5);">
+      <!-- Menu -->
+      
+      <!-- Title -->
+      <div class="calcite-title calcite-overflow-hidden">
+        <a href="https://www.cumberlandrivercompact.org/">
+          <img src="assets/icreek_logo.png" class="img-fluid" id="icreek-logo" alt="Responsive image">
+        </a>
+      </div>
+      </nav>
+      
+      <!--/.calcite-navbar -->
+      
+      <!-- Map  -->
+      
+      <div class="calcite-map calcite-map-absolute">
+        <div id="mapViewDiv">
+          <div id="outputMessages">
+              <div id="searchWidgetDiv" tabindex="0"></div>
 
-  <!--/.calcite-navbar -->
-
-  <!-- Map  -->
-
-  <div class="calcite-map calcite-map-absolute">
-    <div id="mapViewDiv">
-      <div id="outputMessages">
           <div id="waterway-info"></div>
       </div>
     </div>
@@ -91,24 +61,7 @@
     <!-- Panel - Basemaps -->
 
 
-    <div id="panelInfo" class="panel collapse in">
-      <div id="headingInfo" class="panel-heading" role="tab">
-        <div class="panel-title">
-          <a class="panel-toggle" role="button" data-toggle="collapse" href="#collapseInfo" aria-expanded="true" aria-controls="collapseInfo">
-            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-            <span class="panel-label">About</span>
-          </a>
-          <a class="panel-close" role="button" data-toggle="collapse" tabindex="0" href="#panelInfo">
-            <span class="esri-icon esri-icon-close" aria-hidden="true"></span>
-          </a>
-        </div>
-      </div>
-      <div id="collapseInfo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingInfo">
-        <div class="panel-body">
-          <p>This is my map app!</p>
-        </div>
-      </div>
-    </div>
+    
 
     <!-- Panel - Legend -->
 
@@ -158,6 +111,7 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+   crossorigin="anonymous"></script>
   </body>
 </html>
