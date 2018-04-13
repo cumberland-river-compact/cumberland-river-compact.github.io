@@ -111,7 +111,7 @@ require([
     outline: {
       // autocasts as new SimpleLineSymbol()
       color: [255, 255, 255],
-      width: 2,
+      width: 2.5,
     },
   };
 
@@ -124,8 +124,8 @@ require([
     minSuggestCharacters: 2,
     maxResults: 1,
     searchAllEnabled: false,
-    resultGraphicEnabled: true,
-    resultSymbol: markerSymbol,
+    // resultGraphicEnabled: true,
+    // resultSymbol: markerSymbol,
   });
 
   // searchWidget.on('search-clear', function(event) {
@@ -144,7 +144,7 @@ require([
         geometry: result.feature.geometry,
         symbol: markerSymbol,
       });
-      // searchWidget.resultGraphic = pointGraphic; // TODO: Fix this
+      mapView.graphics.add(pointGraphic);
 
       // Set the geocode result as input to our Identity Task
       params.geometry = result.feature.geometry;
