@@ -79,7 +79,7 @@ require([
     container: 'mapViewDiv',
     map: map,
     padding: {
-      top: 10,
+      top: 70,
       bottom: 10,
       right: 10,
       left: 120,
@@ -303,7 +303,7 @@ require([
   var zoom = new Zoom({
     view: mapView,
   });
-  mapView.ui.add(zoom, 'bottom-right');
+  mapView.ui.add(zoom, 'top-right');
 
   var basemapToggle = new BasemapToggle({
     view: mapView,
