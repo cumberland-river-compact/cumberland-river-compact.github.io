@@ -57,8 +57,6 @@ require([
   // Map
   var map = new WebMap({
     portalItem: {
-      // id: '9f91f911f58540ceaac0300c55e18fbb', // Just a random map for testing
-      // id: '505bc0a0a0cf450e9b40658672ce16be', // The old map
       id: '2dd1e0044d2943779b63612cd9e3bd6e',
     },
   });
@@ -104,7 +102,6 @@ require([
     maxResults: 1,
     searchAllEnabled: false,
   });
-  // CalciteMapArcGISSupport.setSearchExpandEvents(searchWidget);
 
   searchWidget.on('search-clear', function(event) {
     console.log('Search input textbox was cleared.');
@@ -175,21 +172,11 @@ require([
       }
     }
   });
-  // Map widgets
-  // var home = new Home({
-  //   view: mapView
-  // });
-  // mapView.ui.add(home, "top-left");
 
   var zoom = new Zoom({
     view: mapView,
   });
   mapView.ui.add(zoom, 'bottom-left');
-
-  // var compass = new Compass({
-  //   view: mapView
-  // });
-  // mapView.ui.add(compass, "top-left");
 
   var basemapToggle = new BasemapToggle({
     view: mapView,
@@ -214,6 +201,7 @@ require([
   //   view: mapView,
   // });
 });
+
 //var mapView = null;
 //$('[data-toggle="tooltip"]').tooltip();
 //$('#map').hide();
