@@ -1,4 +1,3 @@
-# cumberland-river-compact.github.io
 iCreek
 ======
 ![Logo](/assets/logo-350x126.jpg?raw=true)
