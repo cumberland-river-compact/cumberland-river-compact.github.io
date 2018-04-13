@@ -179,7 +179,7 @@ require([
   var zoom = new Zoom({
     view: mapView,
   });
-  mapView.ui.add(zoom, 'bottom-left');
+  mapView.ui.add(zoom, 'bottom-right');
 
   var basemapToggle = new BasemapToggle({
     view: mapView,
@@ -357,7 +357,7 @@ function showWaterwayInfoAndMap() {
  let waterwayName = "Browns Creek"
  let waterwayStatus = "Unhealthy"
  let problemListHTML = createProblemsLinks(["Altered Streamside Vegetation", "Aluminum"])
-  
+
  let waterwayInformationHtmlTemplate = `<div class="card-body">
  <div class="waterway-heading">
    <h5 class="text-muted">Waterway Nearest This Address</h5>
@@ -394,10 +394,10 @@ function showWaterwayInfoAndMap() {
 }
 
 
-function createProblemsLinks(problemList) {  
+function createProblemsLinks(problemList) {
   let listOfLinks = ""
   problemList.forEach(element => {
-    let urlExtension = element.toLowerCase().split(" ").join("-")    
+    let urlExtension = element.toLowerCase().split(" ").join("-")
     listOfLinks += `<li><a href="${crcBaseUrl}${urlExtension}">${element}</a></li>`
   });
   return listOfLinks
