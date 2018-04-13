@@ -10,7 +10,7 @@ require([
   // ArcGIS
   'esri/WebMap',
   'esri/views/MapView',
-
+  'esri/layers/GraphicsLayer',
   // Widgets
   // TODO: Remove what we don't use...
   'esri/widgets/Zoom',
@@ -23,6 +23,7 @@ require([
   'esri/tasks/support/IdentifyParameters',
   'esri/tasks/QueryTask',
   'esri/tasks/support/Query',
+
   // Bootstrap
   'bootstrap/Collapse',
   'bootstrap/Dropdown',
@@ -36,6 +37,7 @@ require([
 ], function(
   WebMap,
   MapView,
+  GraphicsLayer,
   Zoom,
   Search,
   BasemapToggle,
@@ -51,15 +53,17 @@ require([
 ) {
   var identifyTask, params;
 
-  // TODO: Can we get this URL from the map or the layer's ArcGIS content ID?
   var cumberlandMapUrl =
     'https://start.gisbiz.com/arcgis/rest/services/cumberland/MapServer';
+
+  var resultsLayer = new GraphicsLayer();
 
   // Map
   var map = new WebMap({
     portalItem: {
       id: '2dd1e0044d2943779b63612cd9e3bd6e',
     },
+    // layers: [resultsLayer],
   });
 
   // View
@@ -109,10 +113,9 @@ require([
   // });
 
   searchWidget.on('search-complete', function(event) {
-    // The results are stored in the event Object[]
-    console.log('Results of the search: ', event);
     if (event.results) {
       var result = event.results[0].results[0];
+      // resultsLayer.add(result);
       console.log('Name: ', result.name);
       console.log('Location: ', result.feature);
 
@@ -139,110 +142,99 @@ require([
             // };
             return feature;
           }
-
-          // return arrayUtils.map(results, function(result) {
-          //   var feature = result.feature;
-          //   var layerName = result.layerName;
-          //   feature.attributes.layerName = layerName;
-          //   if (layerName === 'Soil Survey Geographic') {
-          //     feature.popupTemplate = { // autocasts as new PopupTemplate()
-          //       title: "{Map Unit Name}",
-          //       content: "<b>Dominant order:</b> {Dominant Order} ({Dom. Cond. Order %}%)" +
-          //         "<br><b>Farmland Class:</b> {Farmland Class}"
-          //     };
-          //   }
-          //   return feature;
-          // });
         })
-        // .then(showPopup)
         .then(function(feature) {
-          // TODO: We have the polygon! Find the stream(s) inside of it. Call ArcGIS Server.
-          var queryTask = new QueryTask({
-            url: cumberlandMapUrl + '/1',
-          });
-          var query = new Query();
-          query.returnGeometry = true;
-          query.outFields = ['*'];
-          // query.where = 'true=true'; // Return all cities with a population greater than 1 million
-          query.geometry = feature.geometry;
-          query.spatialRelationship = 'intersects';
-          // When resolved, returns features and graphics that satisfy the query.
-          queryTask.execute(query).then(function(results) {
-            console.log(results.features[0].attributes);
-            if(results.features && results.features.length > 0){
-              showWaterwayInfoAndMap(parseData(results.features[0].attributes));
-            } else {
-              showMessageNothingFound()
-            }
-          });
+          // We have the polygon! Zoom to it.
+          if (feature.geometry) {
+            mapView.goTo(feature.geometry.extent.expand(1.4));
+          }
 
-          // When resolved, returns a count of the features that satisfy the query.
-          queryTask.executeForCount(query).then(function(results) {
-            console.log(results);
-          });
-          console.log(feature);
-          console.log('then step 3!');
+          // Find the stream(s) inside of it.
+          // Call ArcGIS Server on all 3 layers: healthy, unhealthy, unassessed
+          for (i = 0; i <= 2; i++) {
+            var queryTask = new QueryTask({
+              url: cumberlandMapUrl + '/' + i, // Note this!
+            });
+            var query = new Query();
+            query.returnGeometry = true;
+            query.outFields = ['*']; // TODO: Specify only fields we need.
+            query.geometry = feature.geometry; // the drainage polygon
+            query.spatialRelationship = 'intersects';
+
+            // When resolved, returns features and graphics that satisfy the query.
+            queryTask.execute(query).then(function(results) {
+              if (results.features && results.features.length > 0) {
+                showWaterwayInfoAndMap(
+                  parseData(results.features[0].attributes)
+                );
+              } else {
+                showMessageNothingFound();
+              }
+            });
+
+            // When resolved, returns a count of features that satisfy the query.
+            queryTask.executeForCount(query).then(function(count) {
+              console.log(count + ' features found');
+            });
+          }
+          showWaterwayInfoAndMap();
 
           function showWaterwayInfoAndMap(waterwayObject) {
-  
-
-            console.log("test", waterwayObject);
-             
             let waterwayName = waterwayObject.name;
             let waterwayStatus = waterwayObject.status;
             let waterwayStatusColorClass = getWaterwayStatusColorClass(waterwayStatus)
             let problemListHTML = createProblemsLinks(waterwayObject.problems);
-          
+
             let waterwayInformationHtmlTemplate = `<div class="card-body">
            <div class="waterway-heading">
              <h5 class="text-muted">Waterway Nearest This Address</h5>
              <h3 class="card-title">${waterwayName}</h3>
            </div>
-          
+
            <div class="waterway-health ${waterwayStatusColorClass}">
              <p class="font-weight-bold">Status: <span id="waterway-status">${waterwayStatus}</span></p>
            </div>
-          
+
            <div class="waterway-problems">
              <p>Select a problem to see how you can help this stream:</p>
              <ul id="waterway-problems-list">
                ${problemListHTML}
              </ul>
-          
+
            </div>
-          
+
            <div class="waterway-adopt">
              <h6 class="font-weight-bold">Adopt a Waterway</h6>
              <p>
                Are you a member of an organization that would be interested in adopting this waterway? Contact us at <a href="tel:6158371151">615-837-1151</a>
              </p>
-          
+
            </div>
-          
+
            <div class="full-map">
            <a href="#">View water quality map for entire basin</a>
            </div>
-          
+
            </div>`;
-          
+
             waterwayInfoDomRef.innerHTML = waterwayInformationHtmlTemplate;
           }
 
-          function parseData(dataObject){
-            console.log("data", dataObject);
-            let arrayOfPopupInfo = dataObject.PopupInfo.split(": ")
-            let status = arrayOfPopupInfo[1].split("<br>")
-            let problems = arrayOfPopupInfo[2].split("<br>")
-            console.log("status", status[0]);
-            console.log("problems", problems[0]);
+          function parseData(dataObject) {
+            console.log('data', dataObject);
+            let arrayOfPopupInfo = dataObject.PopupInfo.split(': ');
+            let status = arrayOfPopupInfo[1].split('<br>');
+            let problems = arrayOfPopupInfo[2].split('<br>');
+            console.log('status', status[0]);
+            console.log('problems', problems[0]);
             let parsedWaterwayObject = {
               name: dataObject.Name,
               status: status[0],
-              problems: problems[0].split(", ")
-            } 
-            return parsedWaterwayObject
+              problems: problems[0].split(', '),
+            };
+            return parsedWaterwayObject;
           }
-          
+
           function createProblemsLinks(problemList) {
             let listOfLinks = '';
             problemList.forEach(element => {
@@ -255,8 +247,9 @@ require([
             return listOfLinks;
           }
 
-          function showMessageNothingFound() {            
-            waterwayInfoDomRef.innerHTML = "<h3>No waterways found in this drainage area. Please try another address.</h3>";
+          function showMessageNothingFound() {
+            waterwayInfoDomRef.innerHTML =
+              '<h3>No waterways found in this drainage area. Please try another address.</h3>';
           }
 
           function getWaterwayStatusColorClass(status) {
@@ -268,20 +261,7 @@ require([
               return "text-dark"
             }
           }
-          
         });
-
-      // Shows the results of the Identify in a popup once the promise is resolved
-      function showPopup(feature) {
-        if (feature) {
-          mapView.popup.open({
-            features: [feature],
-            location: mapView.center, // TODO: use correct location
-          });
-        }
-        // TODO: Disable the wait cursor and/or spinner
-        // dom.byId('mapViewDiv').style.cursor = 'auto';
-      }
     }
   });
 
