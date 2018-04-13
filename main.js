@@ -221,12 +221,16 @@ require([
           }
 
           function showWaterwayInfoAndMap(waterwayObject) {
+            console.log("waterwayObject", waterwayObject);
+            
             let waterwayName = waterwayObject.name;
             let waterwayStatus = waterwayObject.status;
-            let waterwayStatusColorClass = getWaterwayStatusColorClass(
-              waterwayStatus
-            );
-            let problemListHTML = createProblemsLinks(waterwayObject.problems);
+
+            // let waterwayStatusColorClass = getWaterwayStatusColorClass(waterwayStatus);
+            // console.log("waterwayStatusColorClass", waterwayStatusColorClass);
+            
+            // let waterwayProblems = waterwayObject.problems
+
 
             let waterwayInformationHtmlTemplate = `<div class="card-body">
             <div class="waterway-heading">
@@ -234,23 +238,32 @@ require([
               <h2 class="card-title" id="connectTo">${waterwayName}</h2>
             </div>
             <hr class="full-line">
-            <div class="waterway-health ${waterwayStatusColorClass}">
+            <div class="waterway-health">
               <p class="font-weight-bold"><strong>Status: </strong><span id="waterway-status">${waterwayStatus}</span></p>
-            </div>
-            <div class="waterway-problems">
-              <p>Select a problem to see how you can help this stream:</p>
-              <ul id="waterway-problems-list">
-                ${problemListHTML}
-              </ul>
-            </div>
-            <hr class="full-line">
-            <div class="full-map">
+            </div>`
+            console.log("html", waterwayInformationHtmlTemplate);
+
+            if(waterwayObject.problems.length > 0){
+              let problemListHTML = createProblemsLinks(waterwayObject.problems);
+              waterwayInformationHtmlTemplate +=`<div class="waterway-problems">
+                <p>Select a problem to see how you can help this stream:</p>
+                <ul id="waterway-problems-list">
+                  ${problemListHTML}
+                </ul>
+              </div><hr class="full-line">`
+            }
+            
+
+            waterwayInformationHtmlTemplate +=`<div class="full-map">
             <a href="#">View water quality map for entire basin</a>
             </div>
             <div class="waterway-adopt">
               <p>Interested in adopting this waterway? Call the Compact: <a href="tel:6158371151">615-837-1151</a></p>
             </div>
             </div>`;
+
+            console.log("html", waterwayInformationHtmlTemplate);
+            
 
             waterwayInfoDomRef.innerHTML = waterwayInformationHtmlTemplate;
           }
@@ -259,14 +272,20 @@ require([
             console.log('data', dataObject);
             let arrayOfPopupInfo = dataObject.PopupInfo.split(': ');
             let status = arrayOfPopupInfo[1].split('<br>');
-            let problems = arrayOfPopupInfo[2].split('<br>');
             console.log('status', status[0]);
-            console.log('problems', problems[0]);
+            
             let parsedWaterwayObject = {
               name: dataObject.Name,
-              status: status[0],
-              problems: problems[0].split(', '),
+              status: status[0], 
+              problems: []
             };
+
+            if(parsedWaterwayObject.status.toLowerCase() === "unhealthy"){
+              let problems = arrayOfPopupInfo[2].split('<br>');
+              console.log('problems', problems[0]);
+              parsedWaterwayObject.problems = problems[0].split(', ')
+            } 
+            
             return parsedWaterwayObject;
           }
 
@@ -288,10 +307,13 @@ require([
           }
 
           function getWaterwayStatusColorClass(status) {
-            if (status.toLowerCase() === 'unhealthy') {
-              return 'text-danger';
-            } else if (status() === 'healthy') {
-              return 'text-success';
+
+            console.log("status", status);
+            let lowerStatus = status.toLowerCase()
+            if(lowerStatus === "unhealthy"){
+              return "text-danger"
+            } else if(lowerStatus === "healthy"){
+              return "text-success"
             } else {
               return 'text-dark';
             }
