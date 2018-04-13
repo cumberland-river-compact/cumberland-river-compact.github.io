@@ -4,15 +4,19 @@ const waterwayInfoDomRef = document.getElementById('waterway-info');
 
 waterwayInfoDomRef.innerHTML = `<div class="card-body"><h3 class="title">Is Your Waterway Healthy?</h3><p>The Cumberland River Basin includes 18,000 square miles of land and 20,000 miles of streams and rivers. The region is one of the most biodiverse on Earth - home to thousands of plant and animal species and nearly 3 million people, all of whom depend on water to survive.
 </p><p>
-Today, thousands of miles of our basin’s waterways are unhealthy. But, it doesn’t have to be this way. Each of us shares a connection with a waterway and a connection to its health. Using iCreek, you can uncover your waterway, determine its health, and get connected to ideas, people, and resources who can help you promote water quality in your community</p></div>`
+Today, thousands of miles of our basin’s waterways are unhealthy. But, it doesn’t have to be this way. Each of us shares a connection with a waterway and a connection to its health. Using iCreek, you can uncover your waterway, determine its health, and get connected to ideas, people, and resources who can help you promote water quality in your community</p></div>`;
 
 require([
   // ArcGIS
   'esri/WebMap',
   'esri/views/MapView',
   'esri/layers/GraphicsLayer',
+  'esri/Graphic',
+  'esri/symbols/SimpleFillSymbol',
+  'esri/symbols/SimpleLineSymbol',
+  'esri/symbols/SimpleMarkerSymbol',
+
   // Widgets
-  // TODO: Remove what we don't use...
   'esri/widgets/Zoom',
   'esri/widgets/Search',
   'esri/widgets/BasemapToggle',
@@ -38,6 +42,10 @@ require([
   WebMap,
   MapView,
   GraphicsLayer,
+  Graphic,
+  SimpleFillSymbol,
+  SimpleLineSymbol,
+  SimpleMarkerSymbol,
   Zoom,
   Search,
   BasemapToggle,
@@ -56,14 +64,14 @@ require([
   var cumberlandMapUrl =
     'https://start.gisbiz.com/arcgis/rest/services/cumberland/MapServer';
 
-  var resultsLayer = new GraphicsLayer();
+  // var graphicsLayer = new GraphicsLayer();
 
   // Map
   var map = new WebMap({
     portalItem: {
       id: '2dd1e0044d2943779b63612cd9e3bd6e',
     },
-    // layers: [resultsLayer],
+    // layers: [graphicsLayer],
   });
 
   // View
@@ -97,6 +105,16 @@ require([
     CalciteMapArcGISSupport.setPopupPanelSync(mapView);
   });
 
+  var markerSymbol = {
+    type: 'simple-marker', // autocasts as new SimpleMarkerSymbol() ?
+    color: [226, 119, 40],
+    outline: {
+      // autocasts as new SimpleLineSymbol()
+      color: [255, 255, 255],
+      width: 2,
+    },
+  };
+
   var searchWidget = new Search({
     container: 'searchWidgetDiv',
     view: mapView,
@@ -106,6 +124,8 @@ require([
     minSuggestCharacters: 2,
     maxResults: 1,
     searchAllEnabled: false,
+    resultGraphicEnabled: true,
+    resultSymbol: markerSymbol,
   });
 
   // searchWidget.on('search-clear', function(event) {
@@ -116,9 +136,15 @@ require([
     waterwayInfoDomRef.innerHTML = `<h3>Searching...</h3>`
     if (event.results) {
       var result = event.results[0].results[0];
-      // resultsLayer.add(result);
+      // graphicsLayer.add(result);
       console.log('Name: ', result.name);
       console.log('Location: ', result.feature);
+
+      var pointGraphic = new Graphic({
+        geometry: result.feature.geometry,
+        symbol: markerSymbol,
+      });
+      // searchWidget.resultGraphic = pointGraphic; // TODO: Fix this
 
       // Set the geocode result as input to our Identity Task
       params.geometry = result.feature.geometry;
@@ -145,9 +171,26 @@ require([
           }
         })
         .then(function(feature) {
-          // We have the polygon! Zoom to it.
+          // We have the polygon! Zoom to it, highlight it!
           if (feature.geometry) {
             mapView.goTo(feature.geometry.extent.expand(1.4));
+
+            var fillSymbol = {
+              type: 'simple-fill', // autocasts as new SimpleFillSymbol()
+              color: [168, 0, 132, 0.15],
+              outline: {
+                // autocasts as new SimpleLineSymbol()
+                color: [168, 0, 132, 0.79],
+                width: 4,
+              },
+            };
+
+            var polygonGraphic = new Graphic({
+              geometry: feature.geometry,
+              symbol: fillSymbol,
+            });
+
+            mapView.graphics.add(polygonGraphic);
           }
 
           // Find the stream(s) inside of it.
@@ -180,7 +223,9 @@ require([
           function showWaterwayInfoAndMap(waterwayObject) {
             let waterwayName = waterwayObject.name;
             let waterwayStatus = waterwayObject.status;
-            let waterwayStatusColorClass = getWaterwayStatusColorClass(waterwayStatus)
+            let waterwayStatusColorClass = getWaterwayStatusColorClass(
+              waterwayStatus
+            );
             let problemListHTML = createProblemsLinks(waterwayObject.problems);
 
             let waterwayInformationHtmlTemplate = `<div class="card-body">
@@ -243,12 +288,12 @@ require([
           }
 
           function getWaterwayStatusColorClass(status) {
-            if(status.toLowerCase() === "unhealthy"){
-              return "text-danger"
-            } else if(status() === "healthy"){
-              return "text-success"
+            if (status.toLowerCase() === 'unhealthy') {
+              return 'text-danger';
+            } else if (status() === 'healthy') {
+              return 'text-success';
             } else {
-              return "text-dark"
+              return 'text-dark';
             }
           }
         });
