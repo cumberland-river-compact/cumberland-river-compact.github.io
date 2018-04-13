@@ -20,117 +20,92 @@
 
     <title>Welcome to iCreek</title>
   </head>
-  <body class="row calcite-maps calcite-nav-top">
 
-    <div class="container">
-      <img src="assets/banner.png" class="img-fluid" alt="Responsive image" id="heading-img">
-
-      <div id="call-to-action" class="row" style="padding-bottom:1em; background: rgba(255, 255, 255, 0.75);">
-        <div class="col-md" align="center">
-          <h1 class="display-3 text-center main-heading">How Healthy is Your Water?</h1>
-          <!-- <div class="input-group mb-3"> -->
-          <!--   <div class="input-group-prepend"> -->
-          <!--     <span class="input-group-text" id="inputGroup-sizing-default">Address</span> -->
-          <!--   </div> -->
-          <!--   <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="AddressInput" required> -->
-          <!--   <div class="input-group-append"> -->
-          <!--     <button class="btn btn-primary bg-info border-info" type="button" data-toggle="tooltip" data-placement="bottom" title="Search" onclick="getLatLongFromAddress();"> -->
-          <!--       <span><i class="fas fa-search"></i></span> -->
-          <!--     </button> -->
-          <!--   </div> -->
-          <!--     <button class="btn btn-primary bg-info border-info" id="current-location-btn" type="button" data-toggle="tooltip" data-placement="bottom" title="Use current location" onclick="getAddressFromBrowserLocation();"> -->
-          <!--       <span><i class="fas fa-location-arrow"></i></span> -->
-          <!--     </button> -->
-          <!--   </div> -->
-          <!-- <div class="calcite-navbar-search"> -->
-          <div id="searchWidgetDiv"></div>
-          <!-- </div> -->
+  <body class="calcite-maps calcite-nav-top">
+      <!-- Navbar -->
+    
+      <nav class="navbar calcite-navbar navbar-fixed-top calcite-text-light calcite-bg-dark">
+        <!-- Menu -->
+        <div class="dropdown calcite-dropdown calcite-text-dark calcite-bg-light" role="presentation">
+          <a class="dropdown-toggle" role="menubutton" aria-haspopup="true" aria-expanded="false" tabindex="0">
+            <div class="calcite-dropdown-toggle">
+              <span class="sr-only">Toggle dropdown menu</span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a role="menuitem" tabindex="0" data-target="#panelInfo" aria-haspopup="true"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
+            <li><a role="menuitem" tabindex="0" href="#" data-target="#panelLegend" aria-haspopup="true"><span class="glyphicon glyphicon-list-alt"></span> Legend</a></li>
+            <li><a role="menuitem" tabindex="0" href="#" id="calciteToggleNavbar" aria-haspopup="true"><span class="glyphicon glyphicon-fullscreen"></span> Full Map</a></li>
+          </ul>
         </div>
-      </div>
-
-      <div id="map" class="row">
+        <!-- Title -->
+        <div class="calcite-title calcite-overflow-hidden">
+          <span class="calcite-title-main">Calcite Maps</span>
+          <span class="calcite-title-divider hidden-xs"></span>
+          <span class="calcite-title-sub hidden-xs">How Healthy is Your Waterway?</span>
+        </div>
         <!-- Nav -->
-        <nav class="navbar calcite-navbar navbar-fixed-top calcite-text-dark calcite-bg-light" style="background: rgba(255, 246, 212, 0.99);">
-          <!-- Menu -->
-          <!-- <div class="dropdown calcite-dropdown calcite-text-dark calcite-bg-light" role="presentation"> -->
-            <!-- <a class="dropdown-toggle" role="menubutton" aria-haspopup="true" aria-expanded="false" tabindex="0"> -->
-            <!--   <div class="calcite-dropdown-toggle"> -->
-            <!--     <span class="sr-only">Toggle dropdown menu</span> -->
-            <!--     <span></span> -->
-            <!--     <span></span> -->
-            <!--     <span></span> -->
-            <!--     <span></span> -->
-            <!--   </div> -->
-            <!-- </a> -->
-            <!-- <ul class="dropdown-menu" role="menu"> -->
-            <!--   <li><a role="menuitem" tabindex="0" data-target="#panelInfo" aria-haspopup="true"><span class="glyphicon glyphicon-info-sign"></span> About</a></li> -->
-            <!--   <li><a role="menuitem" tabindex="0" href="#" data-target="#panelLegend" aria-haspopup="true"><span class="glyphicon glyphicon-list-alt"></span> Legend</a></li> -->
-            <!-- </ul> -->
-          <!-- </div> -->
-          <!-- Title -->
-          <div class="calcite-title calcite-overflow-hidden">
-            <!-- TODO: Remove the hacky &nbsp; -->
-            <span class="calcite-title-main">&nbsp; iCreek</span>
-            <span class="calcite-title-divider hidden-xs"></span>
-            <span class="calcite-title-sub hidden-xs">Brought to you by <em>Cumberland River Compact</em></span>
-          </div>
-        </nav>
-
-        <!-- Map -->
-        <div class="calcite-map calcite-map-absolute">
-          <div id="mapViewDiv"></div>
-        </div>
-
-        <!-- Panels -->
-        <div class="calcite-panels calcite-panels-left calcite-text-dark calcite-bg-light panel-group">
-
-          <!-- About Panel -->
-          <!-- <div id="panelInfo" class="panel collapse in"> -->
-          <!--   <div id="headingInfo" class="panel-heading" role="tab"> -->
-          <!--     <div class="panel-title"> -->
-          <!--       <a class="panel-toggle" role="button" data-toggle="collapse" href="#collapseInfo"  aria-expanded="true" aria-controls="collapseInfo"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span><span class="panel-label">About</span></a> -->
-          <!--       <a class="panel-close" role="button" data-toggle="collapse" tabindex="0" href="#panelInfo"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a> -->
-          <!--     </div> -->
-          <!--   </div> -->
-          <!--   <div id="collapseInfo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingInfo"> -->
-          <!--     <div class="panel-body"> -->
-          <!--       <p>This is my map app!</p> -->
-          <!--     </div> -->
-          <!--   </div> -->
-          <!-- </div> -->
-
-          <!-- Legend Panel -->
-          <!-- <div id="panelLegend" class="panel collapse"> -->
-          <!--   <div id="headingLegend" class="panel-heading" role="tab"> -->
-          <!--     <div class="panel-title"> -->
-          <!--       <a class="panel-toggle" role="button" data-toggle="collapse" href="#collapseLegend" aria-expanded="false" aria-controls="collapseLegend"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span><span class="panel-label">Legend</span></a> -->
-          <!--       <a class="panel-close" role="button" data-toggle="collapse" tabindex="0" href="#panelLegend"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a> -->
-          <!--     </div> -->
-          <!--   </div> -->
-          <!--   <div id="collapseLegend" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingLegend"> -->
-          <!--     <div class="panel-body"> -->
-          <!--       <div id="legendDiv"></div> -->
-          <!--     </div> -->
-          <!--   </div> -->
-          <!-- </div> -->
-          <!-- </div> -->
-
-          <!-- Result Panel -->
-          <div id="panelResult" class="panel collapse">
-            <div id="headingResult" class="panel-heading" role="tab">
-              <div class="panel-title">
-                <a class="panel-toggle" role="button" data-toggle="collapse" href="#collapseResult" aria-expanded="false" aria-controls="collapseLegend"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span><span class="panel-label">Result</span></a>
-                <a class="panel-close" role="button" data-toggle="collapse" tabindex="0" href="#panelResult"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>
-              </div>
+        <ul class="nav navbar-nav calcite-nav">
+          <li>
+            <!-- <div class="calcite-navbar-search calcite-search-expander"> -->
+              <div id="searchWidgetDiv"></div>
+            <!-- </div> -->
+          </li>
+        </ul>
+      </nav>
+    
+      <!--/.calcite-navbar -->
+    
+      <!-- Map  -->
+    
+      <div class="calcite-map calcite-map-absolute">
+        <div id="mapViewDiv"></div>
+      </div>
+    
+      <!-- /.calcite-map -->
+    
+      <!-- Panels -->
+    
+      <div class="calcite-panels calcite-panels-right calcite-text-light calcite-bg-dark panel-group">
+    
+        <!-- Panel - Basemaps -->
+    
+        <div id="panelInfo" class="panel collapse in">
+          <div id="headingInfo" class="panel-heading" role="tab">
+            <div class="panel-title">
+              <a class="panel-toggle" role="button" data-toggle="collapse" href="#collapseInfo"  aria-expanded="true" aria-controls="collapseInfo"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span><span class="panel-label">About</span></a> 
+              <a class="panel-close" role="button" data-toggle="collapse" tabindex="0" href="#panelInfo"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>  
             </div>
-            <div id="collapseResult" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingResult">
-              <div class="panel-body">
-                <div id="resultDiv"></div>
-              </div>
+          </div>
+          <div id="collapseInfo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingInfo">
+            <div class="panel-body">
+              <p>This is my map app!</p>
+            </div>
+         </div>
+        </div>
+    
+        <!-- Panel - Legend -->
+    
+        <div id="panelLegend" class="panel collapse">
+          <div id="headingLegend" class="panel-heading" role="tab">
+            <div class="panel-title">
+              <a class="panel-toggle" role="button" data-toggle="collapse" href="#collapseLegend" aria-expanded="false" aria-controls="collapseLegend"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span><span class="panel-label">Legend</span></a> 
+              <a class="panel-close" role="button" data-toggle="collapse" tabindex="0" href="#panelLegend"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a> 
+            </div>
+          </div>
+          <div id="collapseLegend" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingLegend">
+            <div class="panel-body">            
+              <div id="legendDiv"></div>
             </div>
           </div>
         </div>
-
+    
+      </div>
+        
         <script type="text/javascript">
           var dojoConfig = {
             packages: [{
@@ -368,8 +343,6 @@
         <!-- <div class="col-md"> -->
         <!--     <div id="map"></div> -->
         <!-- </div> -->
-      </div>
-    </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
