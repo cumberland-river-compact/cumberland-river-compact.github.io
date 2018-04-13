@@ -8,19 +8,14 @@ Today, thousands of miles of our basin’s waterways are unhealthy. But, it does
 
 require([
   // ArcGIS
-  'esri/Map',
   'esri/WebMap',
   'esri/views/MapView',
 
   // Widgets
   // TODO: Remove what we don't use...
-  'esri/widgets/Home',
   'esri/widgets/Zoom',
-  'esri/widgets/Compass',
   'esri/widgets/Search',
-  'esri/widgets/Legend',
   'esri/widgets/BasemapToggle',
-  'esri/widgets/ScaleBar',
   'esri/widgets/Attribution',
 
   // Tasks
@@ -38,16 +33,11 @@ require([
 
   'dojo/domReady!',
 ], function(
-  Map,
   WebMap,
   MapView,
-  Home,
   Zoom,
-  Compass,
   Search,
-  Legend,
   BasemapToggle,
-  ScaleBar,
   Attribution,
   IdentifyTask,
   IdentifyParameters,
@@ -60,7 +50,7 @@ require([
 
   // TODO: Can we get this URL from the map or the layer's ArcGIS content ID?
   var drainageAreasUrl =
-    'https://watersgeo.epa.gov/arcgis/rest/services/NHDPlus_NP21/Catchments_NP21_Simplified/MapServer';
+    'https://start.gisbiz.com/arcgis/rest/services/cumberland/MapServer/3';
 
   // Map
   var map = new WebMap({
@@ -134,18 +124,16 @@ require([
       identifyTask
         .execute(params)
         .then(function(response) {
-          var results = response.results;
-          if (results[0]) {
-            var drainageArea = results[0];
-            var feature = drainageArea.feature;
+          if (response) {
+            var drainageArea = response;
             var layerName = drainageArea.layerName;
-            feature.attributes.layerName = layerName;
-            feature.popupTemplate = {
-              // autocasts as new PopupTemplate()
-              title: 'Title 123',
-              content: 'Content 345',
-            };
-            return feature;
+            // feature.attributes.layerName = layerName;
+            // drainageArea.popupTemplate = {
+            //   // autocasts as new PopupTemplate()
+            //   title: 'Title 123',
+            //   content: 'Content 345',
+            // };
+            return drainageArea;
           }
 
           // return arrayUtils.map(results, function(result) {
@@ -162,10 +150,10 @@ require([
           //   return feature;
           // });
         })
-        .then(showPopup)
+        // .then(showPopup)
         .then(function() {
-          console.log('then!');
-          showWaterwayInfoAndMap()
+          console.log('then step 3!');
+          showWaterwayInfoAndMap();
         });
 
       // Shows the results of the Identify in a popup once the promise is resolved
@@ -189,15 +177,10 @@ require([
 
   var basemapToggle = new BasemapToggle({
     view: mapView,
-    nextBasemap: 'todo',
+    nextBasemap: 'topo',
     // nextBasemap: "streets-relief-vector"
   });
   mapView.ui.add(basemapToggle, 'bottom-right');
-
-  // var scaleBar = new ScaleBar({
-  //   view: mapView
-  // });
-  // mapView.ui.add(scaleBar, "bottom-left");
 
   var attribution = new Attribution({
     view: mapView,
@@ -210,152 +193,6 @@ require([
   //   view: mapView,
   // });
 });
-
-//var mapView = null;
-//$('[data-toggle="tooltip"]').tooltip();
-//$('#map').hide();
-
-//require([
-//  'esri/views/MapView',
-//  'esri/WebMap',
-//  // 'esri/tasks/IdentifyTask', // TODO: remove?
-//  // 'esri/tasks/support/IdentifyParameters', // TODO: remove?
-//  // 'esri/widgets/BasemapToggle',
-//  'dojo/domReady!',
-//], function(
-//  MapView,
-//  /* IdentifyTask, IdentifyParameters, */ BasemapToggle,
-//  WebMap
-//) {
-//  /************************************************************
-//   * Creates a new WebMap instance. A WebMap must reference
-//   * a PortalItem ID that represents a WebMap saved to
-//   * arcgis.com or an on-premise portal.
-//   *
-//   * To load a WebMap from an on-premise portal, set the portal
-//   * url with esriConfig.portalUrl.
-//   ************************************************************/
-//  var webmap = new WebMap({
-//    portalItem: {
-//      // id: 'c13022a5c4754b958d3af300b2f0afc3',
-//      id: '505bc0a0a0cf450e9b40658672ce16be',
-//    },
-//  });
-
-//  /************************************************************
-//   * Set the WebMap instance to the map property in a MapView.
-//   ************************************************************/
-//  mapView = new MapView({
-//    map: webmap,
-//    container: 'map',
-//    center: [-86.75, 36.16], // Nashville, TN
-//    zoom: 11,
-//  });
-
-//  // var toggle = new BasemapToggle({
-//  //   view: mapView,
-//  //   nextBasemap: "hybrid" // allows for toggling to the 'hybrid' basemap
-//  // });
-
-//  // mapView.ui.add(toggle, "top-right");
-
-//  // mapView.when(function() {
-//  //   console.log('when!');
-//  //   // Layers are indexed by position
-//  //   // var myLayer = mapView.layers.getItemAt(1);
-//  //   // mapView.whenLayerView(myLayer).then(function(lyrView) {
-//  //   //   console.log('layer found!');
-//  //   // });
-//  // });
-//});
-
-//function getLatLongFromAddress() {
-//  addressData = {
-//    singleLine: $('#AddressInput').val(),
-//    outFields: 'Match_addr,Addr_type',
-//  };
-//  jQuery.ajax({
-//    url:
-//      'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json',
-//    type: 'POST',
-//    data: addressData,
-//    dataType: 'json',
-//    beforeSend: function(x) {
-//      if (x && x.overrideMimeType) {
-//        x.overrideMimeType('application/j-son;charset=UTF-8');
-//      }
-//    },
-//    success: function(result) {
-//      var addressLatLongs = document.getElementById('retrivedCoOrdinates');
-//      require(['esri/views/MapView', 'esri/WebMap', 'dojo/domReady!'], function(
-//        MapView,
-//        WebMap
-//      ) {
-//        var topHit = result.candidates[0];
-//        mapView.goTo([
-//          Number(topHit.location.x),
-//          Number(topHit.location.y),
-//        ]);
-//        // .then(
-//        //   // TODO: Create a point graphic (aka "marker) to show the geocode result.
-//        //   function() {
-//        //     console.log('then!');
-//        //   }
-//        // );
-//      });
-
-//      //Show information and map
-//      showWaterwayInfoAndMap();
-//    },
-//  });
-//}
-
-//function getAddressFromBrowserLocation() {
-//  if (navigator.geolocation) {
-//    navigator.geolocation.getCurrentPosition(
-//      getAddressFromBrowserLocationSucess,
-//      onFail,
-//      { enableHighAccuracy: true, timeout: 20000 }
-//    );
-//  } else {
-//    x.innerHTML = 'Geolocation is not supported by this browser.';
-//  }
-//}
-
-//function onFail() {
-//  console.log('Error: unable to get geolocation');
-//}
-
-//function getAddressFromBrowserLocationSucess(position) {
-//  addressData = {
-//    location: position.coords.longitude + ',' + position.coords.latitude,
-//    outFields: 'Match_addr,Addr_type',
-//  };
-//  jQuery.ajax({
-//    url:
-//      'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json',
-//    type: 'POST',
-//    data: addressData,
-//    dataType: 'json',
-//    beforeSend: function(x) {
-//      if (x && x.overrideMimeType) {
-//        x.overrideMimeType('application/j-son;charset=UTF-8');
-//      }
-//    },
-//    success: function(result) {
-//      $('#AddressInput').val(result.address.Match_addr);
-//      mapView.goTo([Number(result.location.x), Number(result.location.y)]);
-//      // .then(
-//      //   // TODO: Create a point graphic (aka "marker) to show the geocode result.
-//      //   function() {
-//      //     console.log('then!');
-//      //   }
-//      // );
-//      //Show information and map
-//      showWaterwayInfoAndMap();
-//    },
-//  });
-//}
 
 function showWaterwayInfoAndMap() {
  let waterwayName = "Browns Creek"
