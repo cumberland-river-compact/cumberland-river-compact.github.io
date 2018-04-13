@@ -1,4 +1,5 @@
 var MainMapView = null;
+$( "#map" ).hide();
 
 require([
   'esri/views/MapView',
@@ -32,14 +33,14 @@ require([
     zoom: 12,
   });
 
-  MainMapView.when(function() {
-    console.log('when!');
-    // Layers are indexed by position
-    // var myLayer = MainMapView.layers.getItemAt(1);
-    // MainMapView.whenLayerView(myLayer).then(function(lyrView) {
-    //   console.log('layer found!');
-    // });
-  });
+  // MainMapView.when(function() {
+  //   console.log('when!');
+  //   // Layers are indexed by position
+  //   // var myLayer = MainMapView.layers.getItemAt(1);
+  //   // MainMapView.whenLayerView(myLayer).then(function(lyrView) {
+  //   //   console.log('layer found!');
+  //   // });
+  // });
 });
 
 function getLatLongFromAddress() {
@@ -68,14 +69,18 @@ function getLatLongFromAddress() {
         MainMapView.goTo([
           Number(topHit.location.x),
           Number(topHit.location.y),
-        ]).then(
-          // TODO: Create a point graphic (aka "marker) to show the geocode result.
-          function() {
-            console.log('then!');
-          }
-        );
+        ]);
+        // .then(
+        //   // TODO: Create a point graphic (aka "marker) to show the geocode result.
+        //   function() {
+        //     console.log('then!');
+        //   }
+        // );
       });
-    },
+
+      //Show information and map
+      showWaterwayInfoAndMap()
+    }
   });
 }
 
@@ -96,6 +101,8 @@ function onFail() {
 }
 
 function getAddressFromBrowserLocationSucess(position) {
+  console.log("test");
+
   addressData = {
     location: position.coords.longitude + ',' + position.coords.latitude,
     outFields: 'Match_addr,Addr_type',
@@ -116,12 +123,60 @@ function getAddressFromBrowserLocationSucess(position) {
       MainMapView.goTo([
         Number(result.location.x),
         Number(result.location.y),
-      ]).then(
-        // TODO: Create a point graphic (aka "marker) to show the geocode result.
-        function() {
-          console.log('then!');
-        }
-      );
+      ]);
+      // .then(
+      //   // TODO: Create a point graphic (aka "marker) to show the geocode result.
+      //   function() {
+      //     console.log('then!');
+      //   }
+      // );
+      //Show information and map
+      showWaterwayInfoAndMap()
     },
   });
+}
+
+
+function showWaterwayInfoAndMap(){
+  const waterwayInfoDomRef = document.getElementById("waterway-info");
+  let waterwayInformationHtmlTemplate = `<div class="card-body">
+  <div class="waterway-heading">
+    <h5 class="text-muted">Waterway nearest this address</h5>
+    <h3 class="card-title">Browns Creek</h3>
+  </div>
+
+  <div class="waterway-health text-danger">
+    <p class="font-weight-bold">Status: <span id="waterway-status">Unhealthy</span></p>
+  </div>
+
+  <div class="waterway-problems">
+    <p>Select a problem to see how you can help this stream:</p>
+    <ul id="waterway-problems-list">
+      <li><a href="#">Pathogens</a></li>
+      <li><a href="#">Nutrients</a></li>
+      <li><a href="#"></a></li>
+    </ul>
+
+  </div>
+
+  <div class="waterway-adopt">
+    <h6 class="font-weight-bold">Adopt a Waterway</h6>
+    <p>
+      Are you a member of a group or organization in your community that would be interested in adopting this waterway?
+      <a href="#">Learn more</a>
+    </p>
+
+  </div>
+
+  <div class="waterway-nearby">
+    <h6 class="font-weight-bold">Neighboring Waterways</h6>
+    <p>Check the health of these waterways near this address:</p>
+    <ul id="neighbor-waterways-list"></ul>
+  </div>
+
+  </div>`;
+
+  console.log(waterwayInfoDomRef);
+  waterwayInfoDomRef.innerHTML = waterwayInformationHtmlTemplate;
+  $( "#map" ).show();
 }
