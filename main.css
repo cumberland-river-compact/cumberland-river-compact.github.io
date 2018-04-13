@@ -63,7 +63,6 @@ ul {
   color: white;
   font-size: 14px;
   line-height: 30px;
-  overflow: auto
  }
 
 #icreek-logo {
@@ -76,31 +75,9 @@ ul {
  }
  
  #searchWidgetDiv{
-  margin: 8px;
+  width: 95%;
+  margin: 10px 8px 0px 10px;
  }
-
-
-@media (max-width: 768px) {
-  .main-heading {
-    font-size: 2em;
-  }
-
-  #outputMessages {
-    position: absolute;
-    z-index: 70;
-    top: 50%;
-    bottom: 0;
-    box-sizing: border-box;
-    height: 50%;
-    width: 100%;
-    background: rgba(1, 0, 0, 0.5);
-    color: white;
-    font-size: 14px;
-    line-height: 30px;
-    overflow: auto;
-    padding-bottom: 30px;
-   }
-}
 
 #waterway-info .title{
   text-align: center;
@@ -178,4 +155,26 @@ ul {
   color: rgb(161, 157, 157);
   background-color: rgb(161, 157, 157);
   border: none;
+}
+
+@media (max-width: 768px) {
+  .main-heading {
+    font-size: 2em;
+  }
+
+  #outputMessages {
+    position: absolute;
+    z-index: 70;
+    top: 50%;
+    bottom: 0;
+    box-sizing: border-box;
+    height: 50%;
+    width: 100%;
+    background: rgba(1, 0, 0, 0.5);
+    color: white;
+    font-size: 14px;
+    line-height: 30px;
+    overflow: auto;
+    padding-bottom: 30px;
+   }
 }
