@@ -1,5 +1,11 @@
 let crcBaseUrl = "http://cumberlandriverbasin.org/"
 
+const waterwayInfoDomRef = document.getElementById('waterway-info');
+waterwayInfoDomRef.innerHTML = `<div class="card-body"><h3>How Healthy is Your Waterway?</h3><p>The Cumberland River Basin is a vast region that includes 18,000 square miles of land and over 20,000 miles of streams and rivers. The region is one of the most biodiverse on Earth - home to thousands upon thousands of plant and animal species and nearly 3 million people, all of whom depend on clean and abundant water to survive.
+
+Today, thousands of miles of our basin’s waterways are unhealthy. But, it doesn’t have to be this way. Each and every one of us shares a connection with a waterway and a connection to its health. Use iCreek, to uncover your waterway,  determine its health, and to get connected to ideas, people, and resources who can help you promite water quality in your community.</p></div>`
+
+
 require([
   // ArcGIS
   'esri/Map',
@@ -352,8 +358,6 @@ require([
 //}
 
 function showWaterwayInfoAndMap() {
- const waterwayInfoDomRef = document.getElementById('waterway-info');
-
  let waterwayName = "Browns Creek"
  let waterwayStatus = "Unhealthy"
  let problemListHTML = createProblemsLinks(["Altered Streamside Vegetation", "Aluminum"])
