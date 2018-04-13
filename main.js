@@ -1,10 +1,9 @@
-let crcBaseUrl = "http://cumberlandriverbasin.org/"
+let crcBaseUrl = 'http://cumberlandriverbasin.org/';
 
 const waterwayInfoDomRef = document.getElementById('waterway-info');
 waterwayInfoDomRef.innerHTML = `<div class="card-body"><h3>How Healthy is Your Waterway?</h3><p>The Cumberland River Basin is a vast region that includes 18,000 square miles of land and over 20,000 miles of streams and rivers. The region is one of the most biodiverse on Earth - home to thousands upon thousands of plant and animal species and nearly 3 million people, all of whom depend on clean and abundant water to survive.
 
-Today, thousands of miles of our basin’s waterways are unhealthy. But, it doesn’t have to be this way. Each and every one of us shares a connection with a waterway and a connection to its health. Use iCreek, to uncover your waterway,  determine its health, and to get connected to ideas, people, and resources who can help you promite water quality in your community.</p></div>`
-
+Today, thousands of miles of our basin’s waterways are unhealthy. But, it doesn’t have to be this way. Each and every one of us shares a connection with a waterway and a connection to its health. Use iCreek, to uncover your waterway,  determine its health, and to get connected to ideas, people, and resources who can help you promite water quality in your community.</p></div>`;
 
 require([
   // ArcGIS
@@ -21,7 +20,8 @@ require([
   // Tasks
   'esri/tasks/IdentifyTask',
   'esri/tasks/support/IdentifyParameters',
-
+  'esri/tasks/QueryTask',
+  'esri/tasks/support/Query',
   // Bootstrap
   'bootstrap/Collapse',
   'bootstrap/Dropdown',
@@ -41,6 +41,8 @@ require([
   Attribution,
   IdentifyTask,
   IdentifyParameters,
+  QueryTask,
+  Query,
   Collapse,
   Dropdown,
   CalciteMaps,
@@ -49,8 +51,8 @@ require([
   var identifyTask, params;
 
   // TODO: Can we get this URL from the map or the layer's ArcGIS content ID?
-  var drainageAreasUrl =
-    'https://start.gisbiz.com/arcgis/rest/services/cumberland/MapServer/3';
+  var cumberlandMapUrl =
+    'https://start.gisbiz.com/arcgis/rest/services/cumberland/MapServer';
 
   // Map
   var map = new WebMap({
@@ -64,8 +66,7 @@ require([
     container: 'mapViewDiv',
     map: map,
     padding: {
-      // Use the same value as #header-img height
-      top: 395,
+      top: 10,
       bottom: 10,
       right: 10,
       left: 10,
@@ -76,11 +77,12 @@ require([
   mapView.when(function() {
     console.log('when!');
     // Create an identify task to locate boundaries
-    identifyTask = new IdentifyTask(drainageAreasUrl);
+    identifyTask = new IdentifyTask(cumberlandMapUrl);
     params = new IdentifyParameters();
     params.tolerance = 1;
-    params.layerIds = [0]; // This map service's layer is found by ID
-    params.layerOption = 'top';
+    params.layerIds = [3]; // The drainage polygons layer is found by ID
+    params.layerOption = 'all';
+    params.returnGeometry = true; // Yes, we need the geometry
     params.width = mapView.width;
     params.height = mapView.height;
   });
@@ -101,9 +103,9 @@ require([
     searchAllEnabled: false,
   });
 
-  searchWidget.on('search-clear', function(event) {
-    console.log('Search input textbox was cleared.');
-  });
+  // searchWidget.on('search-clear', function(event) {
+  //   console.log('Search input textbox was cleared.');
+  // });
 
   searchWidget.on('search-complete', function(event) {
     // The results are stored in the event Object[]
@@ -124,16 +126,17 @@ require([
       identifyTask
         .execute(params)
         .then(function(response) {
-          if (response) {
-            var drainageArea = response;
+          if (response.results) {
+            var drainageArea = response.results[0];
+            var feature = drainageArea.feature;
             var layerName = drainageArea.layerName;
-            // feature.attributes.layerName = layerName;
+            feature.attributes.layerName = layerName;
             // drainageArea.popupTemplate = {
             //   // autocasts as new PopupTemplate()
             //   title: 'Title 123',
             //   content: 'Content 345',
             // };
-            return drainageArea;
+            return feature;
           }
 
           // return arrayUtils.map(results, function(result) {
@@ -151,7 +154,27 @@ require([
           // });
         })
         // .then(showPopup)
-        .then(function() {
+        .then(function(feature) {
+          // TODO: We have the polygon! Find the stream(s) inside of it. Call ArcGIS Server.
+          var queryTask = new QueryTask({
+            url: cumberlandMapUrl + '/1',
+          });
+          var query = new Query();
+          query.returnGeometry = true;
+          query.outFields = ['*'];
+          // query.where = 'true=true'; // Return all cities with a population greater than 1 million
+          query.geometry = feature.geometry;
+          query.spatialRelationship = 'intersects';
+          // When resolved, returns features and graphics that satisfy the query.
+          queryTask.execute(query).then(function(results) {
+            console.log(results.features);
+          });
+
+          // When resolved, returns a count of the features that satisfy the query.
+          queryTask.executeForCount(query).then(function(results) {
+            console.log(results);
+          });
+          console.log(feature);
           console.log('then step 3!');
           showWaterwayInfoAndMap();
         });
@@ -195,11 +218,14 @@ require([
 });
 
 function showWaterwayInfoAndMap() {
- let waterwayName = "Browns Creek"
- let waterwayStatus = "Unhealthy"
- let problemListHTML = createProblemsLinks(["Altered Streamside Vegetation", "Aluminum"])
+  let waterwayName = 'Browns Creek';
+  let waterwayStatus = 'Unhealthy';
+  let problemListHTML = createProblemsLinks([
+    'Altered Streamside Vegetation',
+    'Aluminum',
+  ]);
 
- let waterwayInformationHtmlTemplate = `<div class="card-body">
+  let waterwayInformationHtmlTemplate = `<div class="card-body">
  <div class="waterway-heading">
    <h5 class="text-muted">Waterway Nearest This Address</h5>
    <h3 class="card-title">${waterwayName}</h3>
@@ -231,15 +257,17 @@ function showWaterwayInfoAndMap() {
 
  </div>`;
 
- waterwayInfoDomRef.innerHTML = waterwayInformationHtmlTemplate;
+  waterwayInfoDomRef.innerHTML = waterwayInformationHtmlTemplate;
 }
 
-
 function createProblemsLinks(problemList) {
-  let listOfLinks = ""
+  let listOfLinks = '';
   problemList.forEach(element => {
-    let urlExtension = element.toLowerCase().split(" ").join("-")
-    listOfLinks += `<li><a href="${crcBaseUrl}${urlExtension}">${element}</a></li>`
+    let urlExtension = element
+      .toLowerCase()
+      .split(' ')
+      .join('-');
+    listOfLinks += `<li><a href="${crcBaseUrl}${urlExtension}">${element}</a></li>`;
   });
-  return listOfLinks
+  return listOfLinks;
 }
