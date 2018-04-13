@@ -2,10 +2,13 @@ var MainMapView = null;
 $('[data-toggle="tooltip"]').tooltip()
 $( "#map" ).hide();
 
-require(['esri/views/MapView', 'esri/WebMap', 'dojo/domReady!'], function(
-  MapView,
-  WebMap
-) {
+require([
+  'esri/views/MapView',
+  'esri/WebMap',
+  // 'esri/tasks/IdentifyTask', // TODO: remove?
+  // 'esri/tasks/support/IdentifyParameters', // TODO: remove?
+  'dojo/domReady!',
+], function(MapView, /* IdentifyTask, IdentifyParameters, */ WebMap) {
   /************************************************************
    * Creates a new WebMap instance. A WebMap must reference
    * a PortalItem ID that represents a WebMap saved to
@@ -16,7 +19,7 @@ require(['esri/views/MapView', 'esri/WebMap', 'dojo/domReady!'], function(
    ************************************************************/
   var webmap = new WebMap({
     portalItem: {
-      // autocasts as new PortalItem()
+      // id: 'c13022a5c4754b958d3af300b2f0afc3',
       id: '505bc0a0a0cf450e9b40658672ce16be',
     },
   });
@@ -27,9 +30,18 @@ require(['esri/views/MapView', 'esri/WebMap', 'dojo/domReady!'], function(
   MainMapView = new MapView({
     map: webmap,
     container: 'map',
-    center: [-86, 37],
-    zoom: 13,
+    center: [-86.75, 36.16],
+    zoom: 12,
   });
+
+  // MainMapView.when(function() {
+  //   console.log('when!');
+  //   // Layers are indexed by position
+  //   // var myLayer = MainMapView.layers.getItemAt(1);
+  //   // MainMapView.whenLayerView(myLayer).then(function(lyrView) {
+  //   //   console.log('layer found!');
+  //   // });
+  // });
 });
 
 function getLatLongFromAddress() {
@@ -54,18 +66,17 @@ function getLatLongFromAddress() {
         MapView,
         WebMap
       ) {
-        var top = result.candidates[0];
+        var topHit = result.candidates[0];
         MainMapView.goTo([
-          Number(result.candidates[0].location.x),
-          Number(result.candidates[0].location.y),
+          Number(topHit.location.x),
+          Number(topHit.location.y),
         ]);
-        // MainMapView.goTo({
-        //   target: new Extent(694942, 5596444, 1284090, 6163926, SpatialReference.WebMercator),
-        //   // target: new Extent(694942, 5596444, 1284090, 6163926, SpatialReference.WebMercator),
-        //   heading: -20
-        // }, {
-        //   animate: false
-        // });
+        // .then(
+        //   // TODO: Create a point graphic (aka "marker) to show the geocode result.
+        //   function() {
+        //     console.log('then!');
+        //   }
+        // );
       });
 
       //Show information and map
@@ -92,7 +103,7 @@ function onFail() {
 
 function getAddressFromBrowserLocationSucess(position) {
   console.log("test");
-  
+
   addressData = {
     location: position.coords.longitude + ',' + position.coords.latitude,
     outFields: 'Match_addr,Addr_type',
@@ -110,12 +121,19 @@ function getAddressFromBrowserLocationSucess(position) {
     },
     success: function(result) {
       $('#AddressInput').val(result.address.Match_addr);
-      MainMapView.goTo([Number(result.location.x), Number(result.location.y)]);
-
+      MainMapView.goTo([
+        Number(result.location.x),
+        Number(result.location.y),
+      ]);
+      // .then(
+      //   // TODO: Create a point graphic (aka "marker) to show the geocode result.
+      //   function() {
+      //     console.log('then!');
+      //   }
+      // );
       //Show information and map
       showWaterwayInfoAndMap()
-
-    }
+    },
   });
 }
 
