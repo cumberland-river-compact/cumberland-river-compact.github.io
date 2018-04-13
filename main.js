@@ -107,7 +107,7 @@ require([
 
   var markerSymbol = {
     type: 'simple-marker', // autocasts as new SimpleMarkerSymbol() ?
-    color: [226, 119, 40],
+    color: [225, 0, 197],
     outline: {
       // autocasts as new SimpleLineSymbol()
       color: [255, 255, 255],
@@ -222,7 +222,7 @@ require([
 
           function showWaterwayInfoAndMap(waterwayObject) {
             console.log("waterwayObject", waterwayObject);
-            
+
             let waterwayName = waterwayObject.name;
             let waterwayStatus = waterwayObject.status;
 
@@ -249,7 +249,7 @@ require([
                 </ul>
               </div><hr class="full-line">`
             }
-            
+
 
             waterwayInformationHtmlTemplate +=`<div class="full-map">
             <a href="#">View water quality map for entire basin</a>
@@ -260,7 +260,7 @@ require([
             </div>`;
 
             console.log("html", waterwayInformationHtmlTemplate);
-            
+
 
             waterwayInfoDomRef.innerHTML = waterwayInformationHtmlTemplate;
           }
@@ -270,10 +270,10 @@ require([
             let arrayOfPopupInfo = dataObject.PopupInfo.split(': ');
             let status = arrayOfPopupInfo[1].split('<br>');
             console.log('status', status[0]);
-            
+
             let parsedWaterwayObject = {
               name: dataObject.Name,
-              status: status[0], 
+              status: status[0],
               problems: []
             };
 
@@ -281,8 +281,8 @@ require([
               let problems = arrayOfPopupInfo[2].split('<br>');
               console.log('problems', problems[0]);
               parsedWaterwayObject.problems = problems[0].split(', ')
-            } 
-            
+            }
+
             return parsedWaterwayObject;
           }
 
