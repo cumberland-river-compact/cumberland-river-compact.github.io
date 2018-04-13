@@ -167,7 +167,12 @@ require([
           query.spatialRelationship = 'intersects';
           // When resolved, returns features and graphics that satisfy the query.
           queryTask.execute(query).then(function(results) {
-            console.log(results.features);
+            console.log(results.features[0].attributes);
+            if(results.features && results.features.length > 0){
+              showWaterwayInfoAndMap(parseData(results.features[0].attributes));
+            } else {
+              showMessageNothingFound()
+            }
           });
 
           // When resolved, returns a count of the features that satisfy the query.
@@ -176,7 +181,82 @@ require([
           });
           console.log(feature);
           console.log('then step 3!');
-          showWaterwayInfoAndMap();
+
+          function showWaterwayInfoAndMap(waterwayObject) {
+  
+
+            console.log("test", waterwayObject);
+             
+            let waterwayName = waterwayObject.name;
+            let waterwayStatus = waterwayObject.status;
+            let problemListHTML = createProblemsLinks(waterwayObject.problems);
+          
+            let waterwayInformationHtmlTemplate = `<div class="card-body">
+           <div class="waterway-heading">
+             <h5 class="text-muted">Waterway Nearest This Address</h5>
+             <h3 class="card-title">${waterwayName}</h3>
+           </div>
+          
+           <div class="waterway-health text-danger">
+             <p class="font-weight-bold">Status: <span id="waterway-status">${waterwayStatus}</span></p>
+           </div>
+          
+           <div class="waterway-problems">
+             <p>Select a problem to see how you can help this stream:</p>
+             <ul id="waterway-problems-list">
+               ${problemListHTML}
+             </ul>
+          
+           </div>
+          
+           <div class="waterway-adopt">
+             <h6 class="font-weight-bold">Adopt a Waterway</h6>
+             <p>
+               Are you a member of an organization that would be interested in adopting this waterway? Contact us at <a href="tel:6158371151">615-837-1151</a>
+             </p>
+          
+           </div>
+          
+           <div class="full-map">
+           <a href="#">View water quality map for entire basin</a>
+           </div>
+          
+           </div>`;
+          
+            waterwayInfoDomRef.innerHTML = waterwayInformationHtmlTemplate;
+          }
+
+          function parseData(dataObject){
+            console.log("data", dataObject);
+            let arrayOfPopupInfo = dataObject.PopupInfo.split(": ")
+            let status = arrayOfPopupInfo[1].split("<br>")
+            let problems = arrayOfPopupInfo[2].split("<br>")
+            console.log("status", status[0]);
+            console.log("problems", problems[0]);
+            let parsedWaterwayObject = {
+              name: dataObject.Name,
+              status: status[0],
+              problems: problems[0].split(", ")
+            } 
+            return parsedWaterwayObject
+          }
+          
+          function createProblemsLinks(problemList) {
+            let listOfLinks = '';
+            problemList.forEach(element => {
+              let urlExtension = element
+                .toLowerCase()
+                .split(' ')
+                .join('-');
+              listOfLinks += `<li><a href="${crcBaseUrl}${urlExtension}">${element}</a></li>`;
+            });
+            return listOfLinks;
+          }
+
+          function showMessageNothingFound() {            
+            waterwayInfoDomRef.innerHTML = "<h3>No waterways found in this drainage area. Please try another address.</h3>";
+          }
+          
         });
 
       // Shows the results of the Identify in a popup once the promise is resolved
@@ -216,58 +296,3 @@ require([
   //   view: mapView,
   // });
 });
-
-function showWaterwayInfoAndMap() {
-  let waterwayName = 'Browns Creek';
-  let waterwayStatus = 'Unhealthy';
-  let problemListHTML = createProblemsLinks([
-    'Altered Streamside Vegetation',
-    'Aluminum',
-  ]);
-
-  let waterwayInformationHtmlTemplate = `<div class="card-body">
- <div class="waterway-heading">
-   <h5 class="text-muted">Waterway Nearest This Address</h5>
-   <h3 class="card-title">${waterwayName}</h3>
- </div>
-
- <div class="waterway-health text-danger">
-   <p class="font-weight-bold">Status: <span id="waterway-status">${waterwayStatus}</span></p>
- </div>
-
- <div class="waterway-problems">
-   <p>Select a problem to see how you can help this stream:</p>
-   <ul id="waterway-problems-list">
-     ${problemListHTML}
-   </ul>
-
- </div>
-
- <div class="waterway-adopt">
-   <h6 class="font-weight-bold">Adopt a Waterway</h6>
-   <p>
-     Are you a member of an organization that would be interested in adopting this waterway? Contact us at <a href="tel:6158371151">615-837-1151</a>
-   </p>
-
- </div>
-
- <div class="full-map">
- <a href="#">View water quality map for entire basin</a>
- </div>
-
- </div>`;
-
-  waterwayInfoDomRef.innerHTML = waterwayInformationHtmlTemplate;
-}
-
-function createProblemsLinks(problemList) {
-  let listOfLinks = '';
-  problemList.forEach(element => {
-    let urlExtension = element
-      .toLowerCase()
-      .split(' ')
-      .join('-');
-    listOfLinks += `<li><a href="${crcBaseUrl}${urlExtension}">${element}</a></li>`;
-  });
-  return listOfLinks;
-}
