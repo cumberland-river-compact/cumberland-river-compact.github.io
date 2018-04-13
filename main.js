@@ -58,7 +58,8 @@ require([
   var map = new WebMap({
     portalItem: {
       // id: '9f91f911f58540ceaac0300c55e18fbb', // Just a random map for testing
-      id: '505bc0a0a0cf450e9b40658672ce16be',
+      // id: '505bc0a0a0cf450e9b40658672ce16be', // The old map
+      id: '2dd1e0044d2943779b63612cd9e3bd6e',
     },
   });
 
