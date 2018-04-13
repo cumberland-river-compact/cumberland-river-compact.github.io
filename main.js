@@ -1,9 +1,10 @@
 let crcBaseUrl = 'http://cumberlandriverbasin.org/';
 
 const waterwayInfoDomRef = document.getElementById('waterway-info');
-waterwayInfoDomRef.innerHTML = `<div class="card-body"><h3>How Healthy is Your Waterway?</h3><p>The Cumberland River Basin is a vast region that includes 18,000 square miles of land and over 20,000 miles of streams and rivers. The region is one of the most biodiverse on Earth - home to thousands upon thousands of plant and animal species and nearly 3 million people, all of whom depend on clean and abundant water to survive.
 
-Today, thousands of miles of our basin’s waterways are unhealthy. But, it doesn’t have to be this way. Each and every one of us shares a connection with a waterway and a connection to its health. Use iCreek, to uncover your waterway,  determine its health, and to get connected to ideas, people, and resources who can help you promite water quality in your community.</p></div>`;
+waterwayInfoDomRef.innerHTML = `<div class="card-body"><h3 class="title">Is Your Waterway Healthy?</h3><p>The Cumberland River Basin includes 18,000 square miles of land and 20,000 miles of streams and rivers. The region is one of the most biodiverse on Earth - home to thousands of plant and animal species and nearly 3 million people, all of whom depend on water to survive.
+</p><p>
+Today, thousands of miles of our basin’s waterways are unhealthy. But, it doesn’t have to be this way. Each of us shares a connection with a waterway and a connection to its health. Using iCreek, you can uncover your waterway, determine its health, and get connected to ideas, people, and resources who can help you promote water quality in your community</p></div>`
 
 require([
   // ArcGIS
@@ -189,6 +190,7 @@ require([
              
             let waterwayName = waterwayObject.name;
             let waterwayStatus = waterwayObject.status;
+            let waterwayStatusColorClass = getWaterwayStatusColorClass(waterwayStatus)
             let problemListHTML = createProblemsLinks(waterwayObject.problems);
           
             let waterwayInformationHtmlTemplate = `<div class="card-body">
@@ -197,7 +199,7 @@ require([
              <h3 class="card-title">${waterwayName}</h3>
            </div>
           
-           <div class="waterway-health text-danger">
+           <div class="waterway-health ${waterwayStatusColorClass}">
              <p class="font-weight-bold">Status: <span id="waterway-status">${waterwayStatus}</span></p>
            </div>
           
@@ -255,6 +257,16 @@ require([
 
           function showMessageNothingFound() {            
             waterwayInfoDomRef.innerHTML = "<h3>No waterways found in this drainage area. Please try another address.</h3>";
+          }
+
+          function getWaterwayStatusColorClass(status) {
+            if(status.toLowerCase() === "unhealthy"){
+              return "text-danger"
+            } else if(status() === "healthy"){
+              return "text-success"
+            } else {
+              return "text-dark"
+            }
           }
           
         });

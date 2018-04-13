@@ -91,12 +91,91 @@ ul {
     top: 50%;
     bottom: 0;
     box-sizing: border-box;
-    height: 100%;
+    height: 50%;
     width: 100%;
     background: rgba(1, 0, 0, 0.5);
     color: white;
     font-size: 14px;
     line-height: 30px;
     overflow: auto;
+    padding-bottom: 30px;
    }
+}
+
+#waterway-info .title{
+  text-align: center;
+}
+
+#connectTo{
+  text-align: justify;
+}
+
+#waterway-info p{
+  text-align: justify;
+  padding: 10px;
+  line-height: 20px;
+  font-family: 'Proxima Nova Soft','Helvetica Neue',sans-serif;
+}
+
+.waterway-heading{
+  font-family: 'Proxima Nova Soft','Helvetica Neue',sans-serif;
+  text-align: justify;
+  color: #fff;
+  padding-left: 10px;
+}
+
+.waterway-heading small{
+  color: rgb(161, 157, 157);
+}
+
+#connectedTo{
+  text-align: justify;
+}
+
+#waterway-status{
+  color: #FF3333;
+}
+
+.waterway-problems{
+  margin-top: -15px;
+}
+
+#waterway-problems-list li a
+{
+  list-style-type: none;
+  color: #00CCFF;
+  font-size: 1.6rem;
+  font-family: 'Proxima Nova Soft','Helvetica Neue',sans-serif;
+  text-align: justify;
+}
+
+.waterway-adopt{
+  font-family: 'Proxima Nova Soft','Helvetica Neue',sans-serif;
+  text-align: justify;
+  color: #fff;
+  padding-left: 10px;
+  font-size: 1.5rem;
+}
+
+.waterway-adopt a{
+  color: #00CCFF;
+}
+
+.full-map a{
+  padding-left: 10px;
+  font-size: 1.6rem;
+  color: #00CCFF;
+  font-family: 'Proxima Nova Soft','Helvetica Neue',sans-serif;
+}
+
+.sm-line{
+  width:100px;
+}
+
+.full-line{
+  width:100%;
+  height: 1px;
+  color: rgb(161, 157, 157);
+  background-color: rgb(161, 157, 157);
+  border: none;
 }
