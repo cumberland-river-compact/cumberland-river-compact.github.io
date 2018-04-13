@@ -118,18 +118,16 @@ require([
       identifyTask
         .execute(params)
         .then(function(response) {
-          var results = response.results;
-          if (results[0]) {
-            var drainageArea = results[0];
-            var feature = drainageArea.feature;
+          if (response) {
+            var drainageArea = response;
             var layerName = drainageArea.layerName;
-            feature.attributes.layerName = layerName;
-            feature.popupTemplate = {
-              // autocasts as new PopupTemplate()
-              title: 'Title 123',
-              content: 'Content 345',
-            };
-            return feature;
+            // feature.attributes.layerName = layerName;
+            // drainageArea.popupTemplate = {
+            //   // autocasts as new PopupTemplate()
+            //   title: 'Title 123',
+            //   content: 'Content 345',
+            // };
+            return drainageArea;
           }
 
           // return arrayUtils.map(results, function(result) {
@@ -146,10 +144,10 @@ require([
           //   return feature;
           // });
         })
-        .then(showPopup)
+        // .then(showPopup)
         .then(function() {
-          console.log('then!');
-          showWaterwayInfoAndMap()
+          console.log('then step 3!');
+          showWaterwayInfoAndMap();
         });
 
       // Shows the results of the Identify in a popup once the promise is resolved
