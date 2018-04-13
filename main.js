@@ -113,6 +113,7 @@ require([
   // });
 
   searchWidget.on('search-complete', function(event) {
+    waterwayInfoDomRef.innerHTML = `<h3>Searching...</h3>`
     if (event.results) {
       var result = event.results[0].results[0];
       // resultsLayer.add(result);
@@ -164,11 +165,9 @@ require([
             // When resolved, returns features and graphics that satisfy the query.
             queryTask.execute(query).then(function(results) {
               if (results.features && results.features.length > 0) {
-                showWaterwayInfoAndMap(
-                  parseData(results.features[0].attributes)
-                );
-              } else {
-                showMessageNothingFound();
+                  showWaterwayInfoAndMap(
+                    parseData(results.features[0].attributes)
+                  );
               }
             });
 
@@ -177,7 +176,6 @@ require([
               console.log(count + ' features found');
             });
           }
-          showWaterwayInfoAndMap();
 
           function showWaterwayInfoAndMap(waterwayObject) {
             let waterwayName = waterwayObject.name;
@@ -186,36 +184,28 @@ require([
             let problemListHTML = createProblemsLinks(waterwayObject.problems);
 
             let waterwayInformationHtmlTemplate = `<div class="card-body">
-           <div class="waterway-heading">
-             <h5 class="text-muted">Waterway Nearest This Address</h5>
-             <h3 class="card-title">${waterwayName}</h3>
-           </div>
-
-           <div class="waterway-health ${waterwayStatusColorClass}">
-             <p class="font-weight-bold">Status: <span id="waterway-status">${waterwayStatus}</span></p>
-           </div>
-
-           <div class="waterway-problems">
-             <p>Select a problem to see how you can help this stream:</p>
-             <ul id="waterway-problems-list">
-               ${problemListHTML}
-             </ul>
-
-           </div>
-
-           <div class="waterway-adopt">
-             <h6 class="font-weight-bold">Adopt a Waterway</h6>
-             <p>
-               Are you a member of an organization that would be interested in adopting this waterway? Contact us at <a href="tel:6158371151">615-837-1151</a>
-             </p>
-
-           </div>
-
-           <div class="full-map">
-           <a href="#">View water quality map for entire basin</a>
-           </div>
-
-           </div>`;
+            <div class="waterway-heading">
+              <h4><small>Rain at this location drains to: </small></h4>
+              <h2 class="card-title" id="connectTo">${waterwayName}</h2>
+            </div>
+            <hr class="full-line">
+            <div class="waterway-health ${waterwayStatusColorClass}">
+              <p class="font-weight-bold"><strong>Status: </strong><span id="waterway-status">${waterwayStatus}</span></p>
+            </div>
+            <div class="waterway-problems">
+              <p>Select a problem to see how you can help this stream:</p>
+              <ul id="waterway-problems-list">
+                ${problemListHTML}
+              </ul>
+            </div>
+            <hr class="full-line">
+            <div class="full-map">
+            <a href="#">View water quality map for entire basin</a>
+            </div>
+            <div class="waterway-adopt">
+              <p>Interested in adopting this waterway? Call the Compact: <a href="tel:6158371151">615-837-1151</a></p>
+            </div>
+            </div>`;
 
             waterwayInfoDomRef.innerHTML = waterwayInformationHtmlTemplate;
           }
@@ -242,7 +232,7 @@ require([
                 .toLowerCase()
                 .split(' ')
                 .join('-');
-              listOfLinks += `<li><a href="${crcBaseUrl}${urlExtension}">${element}</a></li>`;
+              listOfLinks += `<li><a href="${crcBaseUrl}${urlExtension}" target="_blank">${element}</a></li>`;
             });
             return listOfLinks;
           }
