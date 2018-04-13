@@ -1,6 +1,6 @@
 var MainMapView = null;
-$('[data-toggle="tooltip"]').tooltip()
-$( "#map" ).hide();
+$('[data-toggle="tooltip"]').tooltip();
+$('#map').hide();
 
 require([
   'esri/views/MapView',
@@ -80,8 +80,8 @@ function getLatLongFromAddress() {
       });
 
       //Show information and map
-      showWaterwayInfoAndMap()
-    }
+      showWaterwayInfoAndMap();
+    },
   });
 }
 
@@ -102,7 +102,7 @@ function onFail() {
 }
 
 function getAddressFromBrowserLocationSucess(position) {
-  console.log("test");
+  console.log('test');
 
   addressData = {
     location: position.coords.longitude + ',' + position.coords.latitude,
@@ -121,10 +121,7 @@ function getAddressFromBrowserLocationSucess(position) {
     },
     success: function(result) {
       $('#AddressInput').val(result.address.Match_addr);
-      MainMapView.goTo([
-        Number(result.location.x),
-        Number(result.location.y),
-      ]);
+      MainMapView.goTo([Number(result.location.x), Number(result.location.y)]);
       // .then(
       //   // TODO: Create a point graphic (aka "marker) to show the geocode result.
       //   function() {
@@ -132,14 +129,13 @@ function getAddressFromBrowserLocationSucess(position) {
       //   }
       // );
       //Show information and map
-      showWaterwayInfoAndMap()
+      showWaterwayInfoAndMap();
     },
   });
 }
 
-
-function showWaterwayInfoAndMap(){
-  const waterwayInfoDomRef = document.getElementById("waterway-info");
+function showWaterwayInfoAndMap() {
+  const waterwayInfoDomRef = document.getElementById('waterway-info');
   let waterwayInformationHtmlTemplate = `<div class="card-body">
   <div class="waterway-heading">
     <h5 class="text-muted">Waterway Nearest This Address</h5>
@@ -182,5 +178,5 @@ function showWaterwayInfoAndMap(){
 
   console.log(waterwayInfoDomRef);
   waterwayInfoDomRef.innerHTML = waterwayInformationHtmlTemplate;
-  $( "#map" ).show();
+  $('#map').show();
 }
