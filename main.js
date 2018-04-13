@@ -226,11 +226,8 @@ require([
             let waterwayName = waterwayObject.name;
             let waterwayStatus = waterwayObject.status;
 
-            // let waterwayStatusColorClass = getWaterwayStatusColorClass(waterwayStatus);
-            // console.log("waterwayStatusColorClass", waterwayStatusColorClass);
-            
-            // let waterwayProblems = waterwayObject.problems
-
+            let waterwayStatusColorClass = getWaterwayStatusColorClass(waterwayStatus);
+            console.log("waterwayStatusColorClass", waterwayStatusColorClass);
 
             let waterwayInformationHtmlTemplate = `<div class="card-body">
             <div class="waterway-heading">
@@ -238,7 +235,7 @@ require([
               <h2 class="card-title" id="connectTo">${waterwayName}</h2>
             </div>
             <hr class="full-line">
-            <div class="waterway-health">
+            <div class="waterway-health ${waterwayStatusColorClass}">
               <p class="font-weight-bold"><strong>Status: </strong><span id="waterway-status">${waterwayStatus}</span></p>
             </div>`
             console.log("html", waterwayInformationHtmlTemplate);
