@@ -65,13 +65,14 @@ require([
 
   var cumberlandMapUrl =
     'https://start.gisbiz.com/arcgis/rest/services/cumberland/MapServer';
+  var catchmentsMapUrl =
+    'https://inlandwaters.geoplatform.gov/arcgis/rest/services/NHDPlus/NHDPlus/MapServer';
 
   // var graphicsLayer = new GraphicsLayer();
 
   // Add NHDPlus catchments
   var catchmentsLayer = new MapImageLayer({
-    url:
-      'https://inlandwaters.geoplatform.gov/arcgis/rest/services/NHDPlus/NHDPlus/MapServer',
+    url: catchmentsMapUrl,
     sublayers: [
       {
         id: 0,
@@ -109,10 +110,10 @@ require([
     console.log('when!');
 
     // Create an identify task to locate boundaries
-    identifyTask = new IdentifyTask(cumberlandMapUrl);
+    identifyTask = new IdentifyTask(catchmentsMapUrl);
     params = new IdentifyParameters();
     params.tolerance = 1;
-    params.layerIds = [3]; // The drainage polygons layer is found by ID
+    params.layerIds = [6]; // The catchments layer is found by ID
     params.layerOption = 'all';
     params.returnGeometry = true; // Yes, we need the geometry
     params.width = mapView.width;
