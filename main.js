@@ -10,6 +10,7 @@ require([
   // ArcGIS
   'esri/WebMap',
   'esri/views/MapView',
+  'esri/layers/MapImageLayer',
   'esri/layers/GraphicsLayer',
   'esri/Graphic',
   'esri/symbols/SimpleFillSymbol',
@@ -41,6 +42,7 @@ require([
 ], function(
   WebMap,
   MapView,
+  MapImageLayer,
   GraphicsLayer,
   Graphic,
   SimpleFillSymbol,
@@ -66,12 +68,28 @@ require([
 
   // var graphicsLayer = new GraphicsLayer();
 
+  // Add NHDPlus catchments
+  var catchmentsLayer = new MapImageLayer({
+    url:
+      'https://inlandwaters.geoplatform.gov/arcgis/rest/services/NHDPlus/NHDPlus/MapServer',
+    sublayers: [
+      {
+        id: 0,
+        visible: true,
+        definitionExpression: "HDPLUS_REGION = '05'",
+        source: {
+          mapLayerId: 6,
+        },
+      },
+    ],
+  });
+
   // Map
   var map = new WebMap({
     portalItem: {
       id: '2dd1e0044d2943779b63612cd9e3bd6e',
     },
-    // layers: [graphicsLayer],
+    layers: [catchmentsLayer],
   });
 
   // View
@@ -89,6 +107,7 @@ require([
 
   mapView.when(function() {
     console.log('when!');
+
     // Create an identify task to locate boundaries
     identifyTask = new IdentifyTask(cumberlandMapUrl);
     params = new IdentifyParameters();
