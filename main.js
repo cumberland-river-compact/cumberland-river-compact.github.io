@@ -10,6 +10,7 @@ require([
   // ArcGIS
   'esri/WebMap',
   'esri/views/MapView',
+  'esri/layers/MapImageLayer',
   'esri/layers/GraphicsLayer',
   'esri/Graphic',
   'esri/symbols/SimpleFillSymbol',
@@ -41,6 +42,7 @@ require([
 ], function(
   WebMap,
   MapView,
+  MapImageLayer,
   GraphicsLayer,
   Graphic,
   SimpleFillSymbol,
@@ -63,15 +65,32 @@ require([
 
   var cumberlandMapUrl =
     'https://start.gisbiz.com/arcgis/rest/services/cumberland/MapServer';
+  var catchmentsMapUrl =
+    'https://inlandwaters.geoplatform.gov/arcgis/rest/services/NHDPlus/NHDPlus/MapServer';
 
   // var graphicsLayer = new GraphicsLayer();
+
+  // Add NHDPlus catchments
+  var catchmentsLayer = new MapImageLayer({
+    url: catchmentsMapUrl,
+    sublayers: [
+      {
+        id: 0,
+        visible: true,
+        definitionExpression: "HDPLUS_REGION = '05'",
+        source: {
+          mapLayerId: 6,
+        },
+      },
+    ],
+  });
 
   // Map
   var map = new WebMap({
     portalItem: {
       id: '2dd1e0044d2943779b63612cd9e3bd6e',
     },
-    // layers: [graphicsLayer],
+    layers: [catchmentsLayer],
   });
 
   // View
@@ -89,11 +108,12 @@ require([
 
   mapView.when(function() {
     console.log('when!');
+
     // Create an identify task to locate boundaries
-    identifyTask = new IdentifyTask(cumberlandMapUrl);
+    identifyTask = new IdentifyTask(catchmentsMapUrl);
     params = new IdentifyParameters();
     params.tolerance = 1;
-    params.layerIds = [3]; // The drainage polygons layer is found by ID
+    params.layerIds = [6]; // The catchments layer is found by ID
     params.layerOption = 'all';
     params.returnGeometry = true; // Yes, we need the geometry
     params.width = mapView.width;
@@ -133,7 +153,7 @@ require([
   // });
 
   searchWidget.on('search-complete', function(event) {
-    waterwayInfoDomRef.innerHTML = `<h3>Searching...</h3>`
+    waterwayInfoDomRef.innerHTML = `<h3>Searching...</h3>`;
     if (event.results) {
       var result = event.results[0].results[0];
       // graphicsLayer.add(result);
@@ -208,9 +228,9 @@ require([
             // When resolved, returns features and graphics that satisfy the query.
             queryTask.execute(query).then(function(results) {
               if (results.features && results.features.length > 0) {
-                  showWaterwayInfoAndMap(
-                    parseData(results.features[0].attributes)
-                  );
+                showWaterwayInfoAndMap(
+                  parseData(results.features[0].attributes)
+                );
               }
             });
 
@@ -221,13 +241,15 @@ require([
           }
 
           function showWaterwayInfoAndMap(waterwayObject) {
-            console.log("waterwayObject", waterwayObject);
+            console.log('waterwayObject', waterwayObject);
 
             let waterwayName = waterwayObject.name;
             let waterwayStatus = waterwayObject.status;
 
-            let waterwayStatusColorClass = getWaterwayStatusColorClass(waterwayStatus);
-            console.log("waterwayStatusColorClass", waterwayStatusColorClass);
+            let waterwayStatusColorClass = getWaterwayStatusColorClass(
+              waterwayStatus
+            );
+            console.log('waterwayStatusColorClass', waterwayStatusColorClass);
 
             let waterwayInformationHtmlTemplate = `<div class="card-body">
             <div class="waterway-heading">
@@ -237,21 +259,22 @@ require([
             <hr class="full-line">
             <div class="waterway-health ${waterwayStatusColorClass}">
               <p class="font-weight-bold"><strong>Status: </strong><span id="waterway-status">${waterwayStatus}</span></p>
-            </div>`
-            console.log("html", waterwayInformationHtmlTemplate);
+            </div>`;
+            console.log('html', waterwayInformationHtmlTemplate);
 
-            if(waterwayObject.problems.length > 0){
-              let problemListHTML = createProblemsLinks(waterwayObject.problems);
-              waterwayInformationHtmlTemplate +=`<div class="waterway-problems">
+            if (waterwayObject.problems.length > 0) {
+              let problemListHTML = createProblemsLinks(
+                waterwayObject.problems
+              );
+              waterwayInformationHtmlTemplate += `<div class="waterway-problems">
                 <p>Select a problem to see how you can help this stream:</p>
                 <ul id="waterway-problems-list">
                   ${problemListHTML}
                 </ul>
-              </div><hr class="full-line">`
+              </div><hr class="full-line">`;
             }
 
-
-            waterwayInformationHtmlTemplate +=`<div class="full-map">
+            waterwayInformationHtmlTemplate += `<div class="full-map">
             <a href="#">View water quality map for entire basin</a>
             </div>
             <div class="waterway-adopt">
@@ -259,8 +282,7 @@ require([
             </div>
             </div>`;
 
-            console.log("html", waterwayInformationHtmlTemplate);
-
+            console.log('html', waterwayInformationHtmlTemplate);
 
             waterwayInfoDomRef.innerHTML = waterwayInformationHtmlTemplate;
           }
@@ -274,13 +296,13 @@ require([
             let parsedWaterwayObject = {
               name: dataObject.Name,
               status: status[0],
-              problems: []
+              problems: [],
             };
 
-            if(parsedWaterwayObject.status.toLowerCase() === "unhealthy"){
+            if (parsedWaterwayObject.status.toLowerCase() === 'unhealthy') {
               let problems = arrayOfPopupInfo[2].split('<br>');
               console.log('problems', problems[0]);
-              parsedWaterwayObject.problems = problems[0].split(', ')
+              parsedWaterwayObject.problems = problems[0].split(', ');
             }
 
             return parsedWaterwayObject;
@@ -304,13 +326,12 @@ require([
           }
 
           function getWaterwayStatusColorClass(status) {
-
-            console.log("status", status);
-            let lowerStatus = status.toLowerCase()
-            if(lowerStatus === "unhealthy"){
-              return "text-danger"
-            } else if(lowerStatus === "healthy"){
-              return "text-success"
+            console.log('status', status);
+            let lowerStatus = status.toLowerCase();
+            if (lowerStatus === 'unhealthy') {
+              return 'text-danger';
+            } else if (lowerStatus === 'healthy') {
+              return 'text-success';
             } else {
               return 'text-dark';
             }
